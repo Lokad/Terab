@@ -16,7 +16,41 @@ Terab will ultimately support multiple APIs, intended for distinct purposes. The
 
 The API includes a list of methods and structures defined in [terab_utxo.h](https://github.com/Lokad/Terab/blob/master/terab_utxo.h).
 
-## Idempotence, monotony and purity
+## Full UTXO plus partial TXO storage
+
+The blockchain is a hybrid between a tree of blocks and a linked list of blocks. Due to the very nature of Bitcoin mining only the freshest part of the blockchain - the most recent blocks - can actually behave as a tree-like structures. Yet, the longest-chain mining rule ensures that tree-like properties of the blockchain does not, and instead always resolve to a linked list of blocks.
+
+The Terab API is explicitly taking advantage of this blockchain by making sure that the API itself does not stand in the way of highly optimized implementation.
+
+The "UTXO" storage of Terab (UTXO standing for _unspent transaction outputs_) would actually be better qualified as an hybrid storage between:
+
+* a UTXO storage - which only keep unspent outputs.
+* a TXO storage - which would keep all outputs.
+
+For all the blocks that are no further than 100 blocks away from the longest chain ever stored in Terab, the entire UTXO set is available for query; but also all the TXO consumptions that did happen through those blocks. This property of Terab ensures that a miner can correctly assess if an output is truly unspent or not.
+
+The 100 blocks cut-off rule of Terab is aligned with the transaction validation rule that prevents coinbase transactions to be spent for 100 blocks.
+
+Restricting the read queries to more recent blocks also ensure that old transactions outputs that have been spent can be fully pruned from the physical data storage that supports Terab. To further clarify, while reading "recent" block, the API can well return "old" outputs, well beyond the last 100 blocks.
+
+Also, as the Terab API exposes some methods that are guaranteed to be _pure_, returning immutable results, the Terab API does prevent any TXO entry to be pruned for 200 blocks.
+
+### Moving away from undo+reorg 
+
+The Terab API moves away from the historic Bitcoin implementation which relied on undo+reorg block patterns. It would still be possible to implement the Terab UTXO API through an undo+reorg approach, but this is not a requirement; and we are inclined to believe that there are superior approaches which are easier to distribute.
+
+## Durability at the block level
+
+Coping with the I/O throughput is one of the major challenged faced by an implementation of the Terab UTXO API. Terab addresses this challenge upfront by adopting a rather specific approach to [durability](https://en.wikipedia.org/wiki/Durability_(database_systems)).
+
+Writes made to the API are only guaranteed to be durable once a block is _committed_ through the API. This leads to an API design were blocks are first _opened_ and finally _committed_. In case of a power failure or other transient failure bringing down the whole Terab system, only committed blocks are guaranteed to be retrievable. 
+
+This design offers the possibility to Terab implementations to largely mitigate the I/O challenge by keeping the most recent entries in non-durable memory.
+
+In practice, Terab does not imply that committing a
+block will be treated a single monolithic operation. Implementations are expected to try flushing incoming data to durable storage as soon as possible, but not offering durability guarantees before the block commit.
+
+## Idempotence and purity
 
 Designing software for distributed computing is difficult. There are many assumptions that cannot be made. See the [fallacies of distributed computing](https://en.wikipedia.org/wiki/Fallacies_of_distributed_computing). The API is designed to precisely take those aspects into account by making all methods either _pure_ or _idempotent_.
 

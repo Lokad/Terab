@@ -85,6 +85,10 @@ int32_t terab_uxto_get_blockinfo(
    outputs: identifies the outpoints to be queried.
    utxos: contains the response, if any.
 
+   Any call to a block that is more than 100 blocks
+   away from the longest chain stored in Terab will
+   be rejected.
+
    The method is PURE.
 */
 int32_t terab_utxo_get(
@@ -99,6 +103,10 @@ int32_t terab_utxo_get(
    parent: identifies the parent of the new block.
    block: identifies the new block itself.
 
+   Any call to a parent block that is more than 
+   100 blocks away from the longest chain stored 
+   in Terab will be rejected.
+
    This method is IDEMPOTENT.
 */
 int32_t terab_utxo_open_block(
@@ -112,6 +120,12 @@ int32_t terab_utxo_open_block(
   utxo_length: specifies the number of outpoints to be written.
   utxos: specifies what should be written to the block 
 
+  Any call to a block that has either not been opened yet
+  or that has already been committed will be rejected.
+
+  Any call to a block that is more than 100 blocks away
+  from the longest chain stored in Terab will be rejected.
+
   This method is IDEMPOTENT.
 */
 int32_t terab_utxo_write_txs(
@@ -123,6 +137,10 @@ int32_t terab_utxo_write_txs(
 /* Closes the write sequence for a new block.
    
    block: identifies the block written to.
+
+   Any call to a block a block that is more than 100 blocks
+   away from the longest chain stored in Terab will be 
+   rejected.
 
    This method is IDEMPOTENT.
 */
