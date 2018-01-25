@@ -2,23 +2,12 @@
 
 #include <stdint.h>
 
-typedef uint8_t BYTE;
-
-/* Uniquely identify a block, typically the hash of the block. */
-typedef struct block_key block_key;
-
-struct block_key
-{
-	int32_t blockid_length;
-	BYTE* blockid;
-};
-
 /* Minimal block metadata, to recursively enumerate the parents. */
 typedef struct block_info block_info;
 
 struct block_info
 {
-	block_key parent;
+	int32_t parent;
 	int32_t blockheight;
 };
 
@@ -27,9 +16,8 @@ typedef struct tx_outpoint tx_outpoint;
 
 struct tx_outpoint
 {
-	int32_t txid_length;
-	BYTE* txid;
-	int32_t output_index;
+	uint8_t txid[32];
+	int32_t index;
 };
 
 /* The payload is the binary data attached to a 
@@ -42,6 +30,11 @@ struct tx_outpoint
 
    The 'capacity' is introduce to offer the possibility
    to pool payloads and avoid re-allocations.
+
+   The implementation of Terab will not modify the
+   'capacity' value, but will modify the 'length' value
+   to indicate the length of the actual payload. The
+   content of 'data' beyond 'length' is left unspecified.
  */
 typedef struct tx_payload tx_payload;
 
@@ -49,17 +42,29 @@ struct tx_payload
 {
 	int32_t capacity;
 	int32_t length;
-	BYTE* data;
+	uint8_t* data;
 };
 
-/* A self-sufficient unspent transaction output,
+/* A self-sufficient transaction output spent or not,
   intended for the validation of input transactions.
-*/
-typedef struct utxo utxo;
 
-struct utxo
+  Event is a enumeration with the values:
+    event = 1: Created
+    event = 2: Spent
+
+  An outpoint is first created (unspent state) and
+  then later spent. The UTXO dataset includes all the
+  create-but-not-yet-spent outpoints.
+
+  If 'txo' is a 'Spent' event, then the two events
+  associated to the outpoints becomes eligible for
+  collection.
+*/
+typedef struct txo txo;
+
+struct txo
 {
-	int32_t type;
+	int32_t event;
 	tx_outpoint outpoint;
 	int32_t blockheight;
 	int64_t satoshi;
@@ -71,10 +76,14 @@ struct utxo
    block: identifies the targeted block.
    info: contains the response, if any.
 
+   In UTXO configuration, any call to a block that is more than 
+   100 blocks away from the longest chain stored in Terab will
+   be rejected.
+
    This method is PURE.
 */
 int32_t terab_uxto_get_blockinfo(
-	block_key block,
+	int32_t block,
 	block_info* info
 );
 
@@ -83,19 +92,15 @@ int32_t terab_uxto_get_blockinfo(
    block: identifies the block of reference.
    output_length: indicates how many outputs are to be queried.
    outputs: identifies the outpoints to be queried.
-   utxos: contains the response, if any.
-
-   Any call to a block that is more than 100 blocks
-   away from the longest chain stored in Terab will
-   be rejected.
+   txos: contains the response, if any.
 
    The method is PURE.
 */
 int32_t terab_utxo_get(
-	block_key block,
+	int32_t block,
 	int32_t outpoint_length,
 	tx_outpoint* outpoints,
-	utxo* utxos
+	txo* txos
 );
 
 /* Starts the write sequence for a new block.
@@ -103,48 +108,45 @@ int32_t terab_utxo_get(
    parent: identifies the parent of the new block.
    block: identifies the new block itself.
 
-   Any call to a parent block that is more than 
-   100 blocks away from the longest chain stored 
+   In UTXO configuration, any call to a parent block that is 
+   more than 100 blocks away from the longest chain stored
    in Terab will be rejected.
 
    This method is IDEMPOTENT.
 */
 int32_t terab_utxo_open_block(
-	block_key parent,
-	block_key block
+	int32_t parent,
+	int32_t block
 );
 
 /* Write new outputs and their payloads to a new block.
   
   block: identifies the block being written to.
-  utxo_length: specifies the number of outpoints to be written.
-  utxos: specifies what should be written to the block 
+  txo_length: specifies the number of outpoints to be written.
+  txos: specifies what should be written to the block.
 
-  Any call to a block that has either not been opened yet
-  or that has already been committed will be rejected.
-
-  Any call to a block that is more than 100 blocks away
-  from the longest chain stored in Terab will be rejected.
+  In UTXO configuration, any call to a block that is more than 
+  100 blocks away from the longest chain stored in Terab will 
+  be rejected.
 
   This method is IDEMPOTENT.
 */
 int32_t terab_utxo_write_txs(
-	block_key block,
-	int32_t utxo_length,
-	utxo* utxos
+	int32_t block,
+	int32_t txo_length,
+	txo* txos
 );
 
 /* Closes the write sequence for a new block.
    
    block: identifies the block written to.
 
-   Any call to a block a block that is more than 100 blocks
-   away from the longest chain stored in Terab will be 
-   rejected.
+   In UTXO configuration, any call to a block a block that 
+   is more than 100 blocks away from the longest chain stored 
+   in Terab will be rejected.
 
    This method is IDEMPOTENT.
 */
 int32_t terab_utxo_commit_block(
-	block_key block
+	int32_t block
 );
-

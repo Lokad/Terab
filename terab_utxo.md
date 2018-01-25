@@ -39,6 +39,10 @@ Also, as the Terab API exposes some methods that are guaranteed to be _pure_, re
 
 The Terab API moves away from the historic Bitcoin implementation which relied on undo+reorg block patterns. It would still be possible to implement the Terab UTXO API through an undo+reorg approach, but this is not a requirement; and we are inclined to believe that there are superior approaches which are easier to distribute.
 
+### Full TXO mode
+
+Terab is also intended to support - through configuration - a _full TXO_ mode where the spent outpoints are never pruned. The Terab API is identical for the two configuration _full TXO_ vs _UTXO_; as it is not possible to alternate between the two modes.
+
 ## Durability at the block level
 
 Coping with the I/O throughput is one of the major challenged faced by an implementation of the Terab UTXO API. Terab addresses this challenge upfront by adopting a rather specific approach to [durability](https://en.wikipedia.org/wiki/Durability_(database_systems)).
@@ -95,3 +99,15 @@ TODO: capacity limits must be specified
 Most methods offered by Terab offer the possibility to perform many read/write at once, typically by passing one or more arrays as part of the request. This design is intentional as chatty APIs do not scale well due to latency problems.
 
 Yet, Terab cannot offer predicable performance over arbitrary large requests. Thus, each method specify its maximal capacity.
+
+## Annexes
+
+### `int32_t` for block identifiers
+
+One century of blocks only represents 5.5M valid blocks, and still represent less than 10M blocks even considering a dramatic increase of the block orphaning rate. Thus,  blocks can be identified through 32-bits integers. Numbering the blocks is done on the client-side of Terab. 
+
+While it is not a strict requirement, blocks are expected to be numbered starting from zero, and going onward through +1 increments. 
+
+### Asynchronous API
+
+While offering of an asynchronous API would be desirable in a context like Terab, it introduces a non-trivial complexity burden for both the Terab and the client implementations. Furthermore, as C does not offer native coroutines, it would displace the coroutine specification burden to Terab as well.
