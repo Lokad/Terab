@@ -2,13 +2,14 @@
 
 #include <stdint.h>
 
-/* Minimal block metadata, to recursively enumerate the parents. */
+/* Block metadata, to recursively enumerate the parents. */
 typedef struct block_info block_info;
 
 struct block_info
 {
 	int32_t parent;
 	int32_t blockheight;
+	uint8_t blockid[32];
 };
 
 /* Uniquely identify a transaction output. */
@@ -106,7 +107,8 @@ int32_t terab_utxo_get(
 /* Starts the write sequence for a new block.
    
    parent: identifies the parent of the new block.
-   block: identifies the new block itself.
+   blockid: the 32-byte hash of the new block.
+   block: returned as the compact identifier of the new block.
 
    In UTXO configuration, any call to a parent block that is 
    more than 100 blocks away from the longest chain stored
@@ -116,7 +118,8 @@ int32_t terab_utxo_get(
 */
 int32_t terab_utxo_open_block(
 	int32_t parent,
-	int32_t block
+	uint8_t* blockid,
+	int32_t* block
 );
 
 /* Write new outputs and their payloads to a new block.
