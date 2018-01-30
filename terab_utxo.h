@@ -2,6 +2,9 @@
 
 #include <stdint.h>
 
+/* Opaque handle to the underlying persistent connection. */
+typedef void* pconnection;
+
 /* Block metadata, to recursively enumerate the parents. */
 typedef struct block_info block_info;
 
@@ -85,7 +88,7 @@ struct txo
 */
 int32_t terab_connect(
 	char* connection_string,
-	void* conn
+	pconnection* conn
 );
 
 /* Get the metadata associated to a block.
@@ -101,7 +104,7 @@ int32_t terab_connect(
    This method is PURE.
 */
 int32_t terab_uxto_get_blockinfo(
-	void* conn,
+	pconnection conn,
 	int32_t block,
 	block_info* info
 );
@@ -117,7 +120,7 @@ int32_t terab_uxto_get_blockinfo(
    The method is PURE.
 */
 int32_t terab_utxo_get(
-	void* conn,
+	pconnection conn,
 	int32_t block,
 	int32_t outpoint_length,
 	tx_outpoint* outpoints,
@@ -138,7 +141,7 @@ int32_t terab_utxo_get(
    This method is IDEMPOTENT.
 */
 int32_t terab_utxo_open_block(
-	void* conn,
+	pconnection conn,
 	int32_t parent,
 	uint8_t* blockid,
 	int32_t* block
@@ -158,7 +161,7 @@ int32_t terab_utxo_open_block(
   This method is IDEMPOTENT.
 */
 int32_t terab_utxo_write_txs(
-	void* conn,
+	pconnection conn,
 	int32_t block,
 	int32_t txo_length,
 	txo* txos
@@ -176,6 +179,6 @@ int32_t terab_utxo_write_txs(
    This method is IDEMPOTENT.
 */
 int32_t terab_utxo_commit_block(
-	void* conn,
+	pconnection conn,
 	int32_t block
 );
