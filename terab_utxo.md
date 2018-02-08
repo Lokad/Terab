@@ -1,8 +1,8 @@
 # Terab UTXO API
 
-> By Joannes Vermorel, Lokad, 2017-01-15
+> By Joannes Vermorel, Lokad, 2017-02-08
 
-See also an [introduction to Terab](https://terab.lokad.com/overview.html)
+See also an [introduction to Terab](https://terab.lokad.com/overview/)
 
 **Abstract:** Terab intends to provides a minimal standardized API dedicated to the management of the UTXO database for Bitcoin Cash. The document provides a high-level overview of the principles guiding our design proposal.
 
@@ -84,29 +84,115 @@ The results returned by the API are always injected into pre-allocated structure
 
 This design removes entirely classes of mistakes where memory management could be considered as ambiguous. As the API does not return anything _new_, it's the sole responsibility of the client to manage its memory.
 
-## Error codes
-
-TODO: error codes must be specified
-
-All methods returns a `int32_t` which should be treated as the error code. When an error is encountered, the behavior of the API is fully unspecified. The client may not make _any_ assumption on the data that might be obtained through a failing method call.
-
-Terab ensures that all failing method calls have no observable side-effect on the state of the system.
-
 ## Capacity limits of methods
-
-TODO: capacity limits must be specified
 
 Most methods offered by Terab offer the possibility to perform many read/write at once, typically by passing one or more arrays as part of the request. This design is intentional as chatty APIs do not scale well due to latency problems.
 
-Yet, Terab cannot offer predicable performance over arbitrary large requests. Thus, each method specify its maximal capacity.
+Yet, Terab cannot offer predicable performance over arbitrary large requests. Thus, a Terab instance should specify through its nominal configuration the maximal number of TXOs which can be read or written in a single method call.
+
+## Error codes
+
+All methods return a `int32_t` which should be treated as the error code. When an error is encountered, the behavior of the API is fully unspecified. The client should not make _any_ assumption on the data that might be obtained through a failing method call, beyond the error code itself.
+
+There are three broad classes of problems that can be encountered:
+
+* **Broken client**: The client implementation needs a fix.
+* **Broken service**: The Terab implementation needs a fix.
+* **Misc. happens**: A hardware problem or an IT problem is causing a malfunction. Worst case, the Terab instance needs replacement.
+
+Terab ensures that all failing method calls have no observable side-effect on the state of the system.
+
+Below, we list the error codes that can be returned by Terab.
+
+### `TERAB_SUCCESS`
+
+The method call succeeded.
+
+### `TERAB_CONNECTION_FAILED` (misc. happens)
+
+The client did not connect to the Terab service. This problem might be caused by a network connectivity issue, or because the Terab service is down or even non-existent.
+
+### `TERAB_AUTHENTICATION_FAILED` (misc. happens)
+
+The client did connect to the Terab service, but the method call was rejected at the authentication level. This problem is most likely caused by a configuration mismatch between the Terab instance and the configuration of the client.
+
+### `TERAB_SERVICE_UNAVAILABLE` (misc. happens)
+
+The Terab instance is not ready yet to accept incoming calls. This problem is transient and should addressed on the client side by a retry-policy with fixed back-off.
+
+### `TERAB_TOO_MANY_REQUESTS` (broken client)
+
+The hard-limit on concurrent connections to the Terab service has been reached. This limit is expected to be part of the explicit configuration of the Terab instance.
+
+This is problem is transient and may be addressed on the client side by a retry-policy with exponential back-off. Then, it is preferable if client implementations can avoid hitting the limit altogether through a design that ensures that the cap on concurrent connections is never reached.
+
+### `TERAB_INTERNAL_ERROR` (broken service)
+
+An unexpected and non-recoverable problem did happen within the Terab instance. This error should not happen, and reflects a defect in the Terab implementation itself.
+
+It is advised to not even try fixing this problem on the client side, but to take contact with the team in charge of the Terab implementation.
+
+### `TERAB_STORAGE_FULL` (misc. happens)
+
+The Terab instance has reached its data storage limit. All subsequent operations, both reads and writes, should be expected to fail as well. Indeed, read operations should be expected to start failing as well because the Terab instance may not be able to properly operate while ensuring that internal logs are properly persisted.
+
+Depending on the Terab implementation, the current instance might be physically upgraded or replaced. The client implementation is not expected to be able to mitigate this problem in any way.
+
+### `TERAB_STORAGE_CORRUPTED` (misc. happens)
+
+The Terab instance is suffering from a non-recoverable data corruption problem. All subsequent operations, both reads and writes, should be expected to fail.
+
+Depending on the Terab implementation, the instance might be repairable or recoverable; or not. The client implementation is not expected to be able to mitigate this problem in any way.
+
+### `TERAB_BLOCK_CORRUPTED` (misc. happens)
+
+The non-committed block has suffered a non-recoverable problem within the Terab instance. Due to the weak durability offered by Terab, a transient problem such as a power cycle may corrupt a block being written. In this case, all the data associated to the uncommitted block should be considered as lost.
+
+If a block is corrupted, the client implementation should open a new block and repeat all the writes for this block. The client implementation is expected to be capable of recovering from this problem.
+
+### `TERAB_BLOCK_FROZEN` (broken client)
+
+The block is too far from the longest chain according to the configuration of the Terab instance. Indeed, unless Terab is configured to keep the full TXO database, new blocks or block writes can only be made against recent parts of the blockchain.
+
+As the client is expected to know beforehand which blocks remain eligible for blockchain extension, the client implementation is expected to avoid this problem altogether.
+
+### `TERAB_BLOCK_UNKNOWN` (broken client)
+
+The arguments refer to a block identifier that is unknown to the Terab instance.
+
+As the client is expected to properly keep track of the block identifiers returned by Terab, the client implementation is expected to avoid this problem altogether.
+
+### `TERAB_TOO_MANY_TXOS` (broken client)
+
+The arguments include too many TXO passed as once, either for a read or write operation.
+
+As the client is expected to know the limits of Terab, the client implementation is expected to avoid this problem altogether.
+
+### `TERAB_BUFFER_TOO_SMALL` (broken client)
+
+One or several buffers are too small to contain the data that should be returned by the Terab instance. The existence of this error code is the consequence of the zero server-side allocation policy of Terab.
+
+As the client is expected to know the memory footing of the payloads attached to transactions, the client implementation is expected to avoid this problem altogether. In particular, it is strongly discouraged to use this error message to "probe" the right buffer size.
+
+### `TERAB_INCONSISTENT_REQUEST` (broken client)
+
+The content of the method call contradicts, at the block level, the content previously written by another method call. The stand-alone content of the call is valid; it is only deemed incorrect as it is inconsistent with the state of Terab.
+
+This error code strictly reflects a class of problems that can only be obtained through multiple method calls which, taken in isolation, would have been considered correct. In practice, it is expected that those problems emerge as race conditions within the client implementation.
+
+### `TERAB_INVALID_REQUEST` (broken client)
+
+The content of the method call is deemed incorrect. This assertion is made independently from the state of the blockchain. For example, negative buffer lengths are always invalid.
+
+The error code captures the broad class of problems that could arise when the client implementation attempts to push corrupted data to the Terab instance. The client implementation is expected to avoid this problem altogether.
 
 ## Annexes
 
 ### `int32_t` for block identifiers
 
-One century of blocks only represents 5.5M valid blocks, and still represent less than 10M blocks even considering a dramatic increase of the block orphaning rate. Thus,  blocks can be identified through 32-bits integers. Numbering the blocks is done on the client-side of Terab. 
+One century of blocks only represents 5.5M valid blocks, and still represent less than 10M blocks even considering a dramatic increase of the block orphaning rate. Thus, blocks can be identified through 32-bits integers. Assigning the block identifiers is done on the server side of Terab.
 
-While it is not a strict requirement, blocks are expected to be numbered starting from zero, and going onward through +1 increments. 
+While it is not a strict requirement, block identifiers are expected to be numbered starting from zero, and going onward through +1 increments. 
 
 ### Asynchronous API
 

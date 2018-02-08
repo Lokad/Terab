@@ -182,3 +182,19 @@ int32_t terab_utxo_commit_block(
 	pconnection conn,
 	int32_t block
 );
+
+#define TERAB_SUCCESS                 0 /* Successful call. */
+#define TERAB_CONNECTION_FAILED       1 /* Failed to connect to the Terab service. */
+#define TERAB_AUTHENTICATION_FAILED   2 /* Failed to authenticate with the Terab service. */
+#define TERAB_SERVICE_UNAVAILABLE     3 /* Terab service is not ready yet to accept requests. */
+#define TERAB_TOO_MANY_REQUESTS       4 /* Too many requests are concurrently made to Terab. */
+#define TERAB_INTERNAL_ERROR          5 /* Something wrong happened. Contact the Terab team. */
+#define TERAB_STORAGE_FULL            6 /* No more storage left for the write operation. */
+#define TERAB_STORAGE_CORRUPTED       7 /* Non-recoverable data corruption at the service level. */
+#define TERAB_BLOCK_CORRUPTED         8 /* The block being written is corrupted and cannot be recovered. */
+#define TERAB_BLOCK_FROZEN            9 /* This block does not accept any new children block. */
+#define TERAB_BLOCK_UNKNOWN          10 /* A block identifier refers to an unknow block. */
+#define TERAB_TOO_MANY_TXOS          11 /* Too many TXOs are being read or written in a single request. */
+#define TERAB_BUFFER_TOO_SMALL       12 /* Buffers are too small to contain the TXOs being returned. */
+#define TERAB_INCONSISTENT_REQUEST   13 /* Broken idempotence. Request contradics previous one.*/
+#define TERAB_INVALID_REQUEST        14 /* Generic invalidity of the arguments of the request. */
