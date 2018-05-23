@@ -1,5 +1,5 @@
 # Terab 4-byte prefix guideline for OP_RETURN on Bitcoin Cash
-> By Joannes Vermorel (Lokad), Amaury Séchet (Bitcoin ABC), May 23rd, 2018
+> By Joannes Vermorel (Lokad), Amaury Séchet (Bitcoin ABC), Shammah Chancellor (Bitcoin ABC), May 23rd, 2018
 
 **Abstract:** As an _optional guideline_, we recommend that all present and future protocols to be implemented on Bitcoin Cash implement a 4-byte prefix scheme, referred to as protocol identifiers, whenever they use OP_RETURN. This scheme will simplify interoperability between protocols, facilitate selective pruning of the blockchain and get built-in support from low-level infrastructure components. The proposal also provides a basic early stage process to let the community claim prefixes for their own protocols.
 
@@ -36,6 +36,8 @@ The protocol ID comes first in order to improve the performance of any filter be
 
 Also the protocol ID values, little-endian, **must be higher than 0x00 00 00 0F and lower than 0x10 00 00 00**. The lower range is reserved because identifiers would collide with special push ops, and would provide a favorable treatment to a short list of protocols. The upper range is reserved for backward compatible potential future adjustments to the present guideline.
 
+The inclusive range 0x0A BC DE 00 to 0x0A BC DE FF is reserved for testing purposes. Software toolkits and educational materials should use this range to demonstrate how protocols are built on Bitcoin. This range is similar in spirit to the domain name `example.com`.
+
 As a courtesy to the community, we recommend to either submit a ticket or a pull request to the Git repository at https://github.com/Lokad/Terab/ to claim your prefix with:
 
 * A display name for the protocol
@@ -63,7 +65,7 @@ Furthermore, by sticking to this guideline, you can expect a degree of support f
 Any OP_RETURN protocol should be resilient to adversarial behaviors where participants can be expected to push garbage to the blockchain. However, there is a big difference between:
 
 * regular adversaries pushing garbage in your direction.
-* having the next Twitter generating collisions in your direction. 
+* having the next large social network generating collisions in your direction. 
 
 Adversaries have to pay transaction fees to garbage your protocol which is not an economically efficient form of attack. However, the next large social network might _profitably_ collide with your protocol while doing it _at scale_.
 
@@ -107,7 +109,3 @@ The lines should be sorted in increasing order against their prefix.
 ## Footnotes
 
 1. For example, Terab (open source project by Lokad) is a specialized persistence backend intended to support the blockchain ultimately growing up to blocks of 1 terabyte. Such software components will be required in the future to cope with the increased usage of Bitcoin.
-
-## Acknowledgement
-
-I would like to thank Shammah Chancellor (Bitcoin ABC) for his invaluable insights to help drafting the fine print of this guideline.
