@@ -1,0 +1,475 @@
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <title>Claim your Bitcoin Protocol Identifier</title>
+
+    <!-- Bootstrap core CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous">
+
+    <style type="text/css">
+      input.invalid-input {
+        border-color: #dc3545 !important;
+        box-shadow: 0 0 0 0.2rem rgba(220,53,69,.25) !important;
+      }
+
+      input.valid-input {
+        border-color: rgb(76, 175, 80) !important;
+        box-shadow: 0 0 0 0.2rem rgba(76, 175, 80, 0.25) !important;
+      }
+    </style>
+  </head>
+
+  <body class="bg-light">
+
+    <div class="container">
+      
+      <div class="pt-3 pb-1 text-center">
+        <h2>Claim your Bitcoin Protocol Identifier</h2>
+      </div>
+
+      <div class="row justify-content-center">
+        <div class="col col-sm-8">
+          
+          <form id="formApp" name="formApp" role="form" method="post">
+            
+            <div class="row">
+              <div class="col mb-3">
+                <label for="prefix">Prefix</label>
+                <input type="text" class="form-control" name="prefix" id="prefix" placeholder="0x0ABCDE00" minlength="10" maxlength="10" required autofocus>
+                <div class="invalid-feedback"></div>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col mb-3">
+                <label for="displayName">Display Name</label>
+                <input type="text" class="form-control" name="displayName" id="displayName" placeholder="Tokeda" required>
+                <div class="invalid-feedback"></div>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col mb-3">
+                <label for="authors">Authors</label>
+                <input type="text" class="form-control" name="authors" id="authors" placeholder="John Doe, Jane Smith" required>
+                <div class="invalid-feedback"></div>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col mb-3">
+                <label for="bitcoinAddress">Bitcoin Address</label>
+                <input type="text" class="form-control" name="bitcoinAddress" id="bitcoinAddress" placeholder="bitcoincash:qqeht8vnwag20yv8dvtcrd4ujx09fwxwsqqqw93w88" required>
+                <div class="invalid-feedback"></div>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col mb-3">
+                <label for="specificationUrl">Specification URL</label>
+                <input type="text" class="form-control" name="specificationUrl" id="specificationUrl" placeholder="https://example.com" required>
+                <div class="invalid-feedback"></div>
+              </div>
+            </div>
+
+            <hr class="mb-4">
+
+            <div class="row justify-content-center mb-5">
+              <div class="col col-sm-5">
+                <button class="btn btn-primary btn-lg btn-block" type="submit">Submit</button>
+              </div>
+            </div>
+
+          </form>
+        </div>
+      </div>
+
+      <div class="row justify-content-center">
+        <div class="col col-sm-8">
+          <textarea class="form-control mb-4" name="protocols" id="protocols" placeholder="Protocols" rows="10" disabled></textarea>
+
+          <div class="row justify-content-center mb-5">
+            <div class="col col-sm-4">
+              <button type="button" class="btn btn-secondary btn-lg btn-block" id="btnCopy" disabled>Copy to Clipboard</button>
+            </div>
+
+            <div class="col col-sm-4">
+              <button type="button" class="btn btn-secondary btn-lg btn-block" id="btnDownload" disabled>Download as CSV</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
+<!-- jQuery -->
+<script src="https://code.jquery.com/jquery-2.0.2.min.js" integrity="sha384-1UZ2WGivCCxSFpBAaNkUfGnXmvLO/eXAvLFtIfO8t54OSIpc1dwSF7LKdARVIy/7" crossorigin="anonymous"></script>
+
+<!-- jQuery validation -->
+<script type="text/javascript">
+  !function(a){"function"==typeof define&&define.amd?define(["jquery"],a):"object"==typeof module&&module.exports?module.exports=a(require("jquery")):a(jQuery)}(function(a){a.extend(a.fn,{validate:function(b){if(!this.length)return void(b&&b.debug&&window.console&&console.warn("Nothing selected, can't validate, returning nothing."));var c=a.data(this[0],"validator");return c?c:(this.attr("novalidate","novalidate"),c=new a.validator(b,this[0]),a.data(this[0],"validator",c),c.settings.onsubmit&&(this.on("click.validate",":submit",function(b){c.submitButton=b.currentTarget,a(this).hasClass("cancel")&&(c.cancelSubmit=!0),void 0!==a(this).attr("formnovalidate")&&(c.cancelSubmit=!0)}),this.on("submit.validate",function(b){function d(){var d,e;return c.submitButton&&(c.settings.submitHandler||c.formSubmitted)&&(d=a("<input type='hidden'/>").attr("name",c.submitButton.name).val(a(c.submitButton).val()).appendTo(c.currentForm)),!c.settings.submitHandler||(e=c.settings.submitHandler.call(c,c.currentForm,b),d&&d.remove(),void 0!==e&&e)}return c.settings.debug&&b.preventDefault(),c.cancelSubmit?(c.cancelSubmit=!1,d()):c.form()?c.pendingRequest?(c.formSubmitted=!0,!1):d():(c.focusInvalid(),!1)})),c)},valid:function(){var b,c,d;return a(this[0]).is("form")?b=this.validate().form():(d=[],b=!0,c=a(this[0].form).validate(),this.each(function(){b=c.element(this)&&b,b||(d=d.concat(c.errorList))}),c.errorList=d),b},rules:function(b,c){var d,e,f,g,h,i,j=this[0];if(null!=j&&(!j.form&&j.hasAttribute("contenteditable")&&(j.form=this.closest("form")[0],j.name=this.attr("name")),null!=j.form)){if(b)switch(d=a.data(j.form,"validator").settings,e=d.rules,f=a.validator.staticRules(j),b){case"add":a.extend(f,a.validator.normalizeRule(c)),delete f.messages,e[j.name]=f,c.messages&&(d.messages[j.name]=a.extend(d.messages[j.name],c.messages));break;case"remove":return c?(i={},a.each(c.split(/\s/),function(a,b){i[b]=f[b],delete f[b]}),i):(delete e[j.name],f)}return g=a.validator.normalizeRules(a.extend({},a.validator.classRules(j),a.validator.attributeRules(j),a.validator.dataRules(j),a.validator.staticRules(j)),j),g.required&&(h=g.required,delete g.required,g=a.extend({required:h},g)),g.remote&&(h=g.remote,delete g.remote,g=a.extend(g,{remote:h})),g}}}),a.extend(a.expr.pseudos||a.expr[":"],{blank:function(b){return!a.trim(""+a(b).val())},filled:function(b){var c=a(b).val();return null!==c&&!!a.trim(""+c)},unchecked:function(b){return!a(b).prop("checked")}}),a.validator=function(b,c){this.settings=a.extend(!0,{},a.validator.defaults,b),this.currentForm=c,this.init()},a.validator.format=function(b,c){return 1===arguments.length?function(){var c=a.makeArray(arguments);return c.unshift(b),a.validator.format.apply(this,c)}:void 0===c?b:(arguments.length>2&&c.constructor!==Array&&(c=a.makeArray(arguments).slice(1)),c.constructor!==Array&&(c=[c]),a.each(c,function(a,c){b=b.replace(new RegExp("\\{"+a+"\\}","g"),function(){return c})}),b)},a.extend(a.validator,{defaults:{messages:{},groups:{},rules:{},errorClass:"error",pendingClass:"pending",validClass:"valid",errorElement:"label",focusCleanup:!1,focusInvalid:!0,errorContainer:a([]),errorLabelContainer:a([]),onsubmit:!0,ignore:":hidden",ignoreTitle:!1,onfocusin:function(a){this.lastActive=a,this.settings.focusCleanup&&(this.settings.unhighlight&&this.settings.unhighlight.call(this,a,this.settings.errorClass,this.settings.validClass),this.hideThese(this.errorsFor(a)))},onfocusout:function(a){this.checkable(a)||!(a.name in this.submitted)&&this.optional(a)||this.element(a)},onkeyup:function(b,c){var d=[16,17,18,20,35,36,37,38,39,40,45,144,225];9===c.which&&""===this.elementValue(b)||a.inArray(c.keyCode,d)!==-1||(b.name in this.submitted||b.name in this.invalid)&&this.element(b)},onclick:function(a){a.name in this.submitted?this.element(a):a.parentNode.name in this.submitted&&this.element(a.parentNode)},highlight:function(b,c,d){"radio"===b.type?this.findByName(b.name).addClass(c).removeClass(d):a(b).addClass(c).removeClass(d)},unhighlight:function(b,c,d){"radio"===b.type?this.findByName(b.name).removeClass(c).addClass(d):a(b).removeClass(c).addClass(d)}},setDefaults:function(b){a.extend(a.validator.defaults,b)},messages:{required:"This field is required.",remote:"Please fix this field.",email:"Please enter a valid email address.",url:"Please enter a valid URL.",date:"Please enter a valid date.",dateISO:"Please enter a valid date (ISO).",number:"Please enter a valid number.",digits:"Please enter only digits.",equalTo:"Please enter the same value again.",maxlength:a.validator.format("Please enter no more than {0} characters."),minlength:a.validator.format("Please enter at least {0} characters."),rangelength:a.validator.format("Please enter a value between {0} and {1} characters long."),range:a.validator.format("Please enter a value between {0} and {1}."),max:a.validator.format("Please enter a value less than or equal to {0}."),min:a.validator.format("Please enter a value greater than or equal to {0}."),step:a.validator.format("Please enter a multiple of {0}.")},autoCreateRanges:!1,prototype:{init:function(){function b(b){!this.form&&this.hasAttribute("contenteditable")&&(this.form=a(this).closest("form")[0],this.name=a(this).attr("name"));var c=a.data(this.form,"validator"),d="on"+b.type.replace(/^validate/,""),e=c.settings;e[d]&&!a(this).is(e.ignore)&&e[d].call(c,this,b)}this.labelContainer=a(this.settings.errorLabelContainer),this.errorContext=this.labelContainer.length&&this.labelContainer||a(this.currentForm),this.containers=a(this.settings.errorContainer).add(this.settings.errorLabelContainer),this.submitted={},this.valueCache={},this.pendingRequest=0,this.pending={},this.invalid={},this.reset();var c,d=this.groups={};a.each(this.settings.groups,function(b,c){"string"==typeof c&&(c=c.split(/\s/)),a.each(c,function(a,c){d[c]=b})}),c=this.settings.rules,a.each(c,function(b,d){c[b]=a.validator.normalizeRule(d)}),a(this.currentForm).on("focusin.validate focusout.validate keyup.validate",":text, [type='password'], [type='file'], select, textarea, [type='number'], [type='search'], [type='tel'], [type='url'], [type='email'], [type='datetime'], [type='date'], [type='month'], [type='week'], [type='time'], [type='datetime-local'], [type='range'], [type='color'], [type='radio'], [type='checkbox'], [contenteditable], [type='button']",b).on("click.validate","select, option, [type='radio'], [type='checkbox']",b),this.settings.invalidHandler&&a(this.currentForm).on("invalid-form.validate",this.settings.invalidHandler)},form:function(){return this.checkForm(),a.extend(this.submitted,this.errorMap),this.invalid=a.extend({},this.errorMap),this.valid()||a(this.currentForm).triggerHandler("invalid-form",[this]),this.showErrors(),this.valid()},checkForm:function(){this.prepareForm();for(var a=0,b=this.currentElements=this.elements();b[a];a++)this.check(b[a]);return this.valid()},element:function(b){var c,d,e=this.clean(b),f=this.validationTargetFor(e),g=this,h=!0;return void 0===f?delete this.invalid[e.name]:(this.prepareElement(f),this.currentElements=a(f),d=this.groups[f.name],d&&a.each(this.groups,function(a,b){b===d&&a!==f.name&&(e=g.validationTargetFor(g.clean(g.findByName(a))),e&&e.name in g.invalid&&(g.currentElements.push(e),h=g.check(e)&&h))}),c=this.check(f)!==!1,h=h&&c,c?this.invalid[f.name]=!1:this.invalid[f.name]=!0,this.numberOfInvalids()||(this.toHide=this.toHide.add(this.containers)),this.showErrors(),a(b).attr("aria-invalid",!c)),h},showErrors:function(b){if(b){var c=this;a.extend(this.errorMap,b),this.errorList=a.map(this.errorMap,function(a,b){return{message:a,element:c.findByName(b)[0]}}),this.successList=a.grep(this.successList,function(a){return!(a.name in b)})}this.settings.showErrors?this.settings.showErrors.call(this,this.errorMap,this.errorList):this.defaultShowErrors()},resetForm:function(){a.fn.resetForm&&a(this.currentForm).resetForm(),this.invalid={},this.submitted={},this.prepareForm(),this.hideErrors();var b=this.elements().removeData("previousValue").removeAttr("aria-invalid");this.resetElements(b)},resetElements:function(a){var b;if(this.settings.unhighlight)for(b=0;a[b];b++)this.settings.unhighlight.call(this,a[b],this.settings.errorClass,""),this.findByName(a[b].name).removeClass(this.settings.validClass);else a.removeClass(this.settings.errorClass).removeClass(this.settings.validClass)},numberOfInvalids:function(){return this.objectLength(this.invalid)},objectLength:function(a){var b,c=0;for(b in a)void 0!==a[b]&&null!==a[b]&&a[b]!==!1&&c++;return c},hideErrors:function(){this.hideThese(this.toHide)},hideThese:function(a){a.not(this.containers).text(""),this.addWrapper(a).hide()},valid:function(){return 0===this.size()},size:function(){return this.errorList.length},focusInvalid:function(){if(this.settings.focusInvalid)try{a(this.findLastActive()||this.errorList.length&&this.errorList[0].element||[]).filter(":visible").focus().trigger("focusin")}catch(b){}},findLastActive:function(){var b=this.lastActive;return b&&1===a.grep(this.errorList,function(a){return a.element.name===b.name}).length&&b},elements:function(){var b=this,c={};return a(this.currentForm).find("input, select, textarea, [contenteditable]").not(":submit, :reset, :image, :disabled").not(this.settings.ignore).filter(function(){var d=this.name||a(this).attr("name");return!d&&b.settings.debug&&window.console&&console.error("%o has no name assigned",this),this.hasAttribute("contenteditable")&&(this.form=a(this).closest("form")[0],this.name=d),!(d in c||!b.objectLength(a(this).rules()))&&(c[d]=!0,!0)})},clean:function(b){return a(b)[0]},errors:function(){var b=this.settings.errorClass.split(" ").join(".");return a(this.settings.errorElement+"."+b,this.errorContext)},resetInternals:function(){this.successList=[],this.errorList=[],this.errorMap={},this.toShow=a([]),this.toHide=a([])},reset:function(){this.resetInternals(),this.currentElements=a([])},prepareForm:function(){this.reset(),this.toHide=this.errors().add(this.containers)},prepareElement:function(a){this.reset(),this.toHide=this.errorsFor(a)},elementValue:function(b){var c,d,e=a(b),f=b.type;return"radio"===f||"checkbox"===f?this.findByName(b.name).filter(":checked").val():"number"===f&&"undefined"!=typeof b.validity?b.validity.badInput?"NaN":e.val():(c=b.hasAttribute("contenteditable")?e.text():e.val(),"file"===f?"C:\\fakepath\\"===c.substr(0,12)?c.substr(12):(d=c.lastIndexOf("/"),d>=0?c.substr(d+1):(d=c.lastIndexOf("\\"),d>=0?c.substr(d+1):c)):"string"==typeof c?c.replace(/\r/g,""):c)},check:function(b){b=this.validationTargetFor(this.clean(b));var c,d,e,f,g=a(b).rules(),h=a.map(g,function(a,b){return b}).length,i=!1,j=this.elementValue(b);if("function"==typeof g.normalizer?f=g.normalizer:"function"==typeof this.settings.normalizer&&(f=this.settings.normalizer),f){if(j=f.call(b,j),"string"!=typeof j)throw new TypeError("The normalizer should return a string value.");delete g.normalizer}for(d in g){e={method:d,parameters:g[d]};try{if(c=a.validator.methods[d].call(this,j,b,e.parameters),"dependency-mismatch"===c&&1===h){i=!0;continue}if(i=!1,"pending"===c)return void(this.toHide=this.toHide.not(this.errorsFor(b)));if(!c)return this.formatAndAdd(b,e),!1}catch(k){throw this.settings.debug&&window.console&&console.log("Exception occurred when checking element "+b.id+", check the '"+e.method+"' method.",k),k instanceof TypeError&&(k.message+=".  Exception occurred when checking element "+b.id+", check the '"+e.method+"' method."),k}}if(!i)return this.objectLength(g)&&this.successList.push(b),!0},customDataMessage:function(b,c){return a(b).data("msg"+c.charAt(0).toUpperCase()+c.substring(1).toLowerCase())||a(b).data("msg")},customMessage:function(a,b){var c=this.settings.messages[a];return c&&(c.constructor===String?c:c[b])},findDefined:function(){for(var a=0;a<arguments.length;a++)if(void 0!==arguments[a])return arguments[a]},defaultMessage:function(b,c){"string"==typeof c&&(c={method:c});var d=this.findDefined(this.customMessage(b.name,c.method),this.customDataMessage(b,c.method),!this.settings.ignoreTitle&&b.title||void 0,a.validator.messages[c.method],"<strong>Warning: No message defined for "+b.name+"</strong>"),e=/\$?\{(\d+)\}/g;return"function"==typeof d?d=d.call(this,c.parameters,b):e.test(d)&&(d=a.validator.format(d.replace(e,"{$1}"),c.parameters)),d},formatAndAdd:function(a,b){var c=this.defaultMessage(a,b);this.errorList.push({message:c,element:a,method:b.method}),this.errorMap[a.name]=c,this.submitted[a.name]=c},addWrapper:function(a){return this.settings.wrapper&&(a=a.add(a.parent(this.settings.wrapper))),a},defaultShowErrors:function(){var a,b,c;for(a=0;this.errorList[a];a++)c=this.errorList[a],this.settings.highlight&&this.settings.highlight.call(this,c.element,this.settings.errorClass,this.settings.validClass),this.showLabel(c.element,c.message);if(this.errorList.length&&(this.toShow=this.toShow.add(this.containers)),this.settings.success)for(a=0;this.successList[a];a++)this.showLabel(this.successList[a]);if(this.settings.unhighlight)for(a=0,b=this.validElements();b[a];a++)this.settings.unhighlight.call(this,b[a],this.settings.errorClass,this.settings.validClass);this.toHide=this.toHide.not(this.toShow),this.hideErrors(),this.addWrapper(this.toShow).show()},validElements:function(){return this.currentElements.not(this.invalidElements())},invalidElements:function(){return a(this.errorList).map(function(){return this.element})},showLabel:function(b,c){var d,e,f,g,h=this.errorsFor(b),i=this.idOrName(b),j=a(b).attr("aria-describedby");h.length?(h.removeClass(this.settings.validClass).addClass(this.settings.errorClass),h.html(c)):(h=a("<"+this.settings.errorElement+">").attr("id",i+"-error").addClass(this.settings.errorClass).html(c||""),d=h,this.settings.wrapper&&(d=h.hide().show().wrap("<"+this.settings.wrapper+"/>").parent()),this.labelContainer.length?this.labelContainer.append(d):this.settings.errorPlacement?this.settings.errorPlacement.call(this,d,a(b)):d.insertAfter(b),h.is("label")?h.attr("for",i):0===h.parents("label[for='"+this.escapeCssMeta(i)+"']").length&&(f=h.attr("id"),j?j.match(new RegExp("\\b"+this.escapeCssMeta(f)+"\\b"))||(j+=" "+f):j=f,a(b).attr("aria-describedby",j),e=this.groups[b.name],e&&(g=this,a.each(g.groups,function(b,c){c===e&&a("[name='"+g.escapeCssMeta(b)+"']",g.currentForm).attr("aria-describedby",h.attr("id"))})))),!c&&this.settings.success&&(h.text(""),"string"==typeof this.settings.success?h.addClass(this.settings.success):this.settings.success(h,b)),this.toShow=this.toShow.add(h)},errorsFor:function(b){var c=this.escapeCssMeta(this.idOrName(b)),d=a(b).attr("aria-describedby"),e="label[for='"+c+"'], label[for='"+c+"'] *";return d&&(e=e+", #"+this.escapeCssMeta(d).replace(/\s+/g,", #")),this.errors().filter(e)},escapeCssMeta:function(a){return a.replace(/([\\!"#$%&'()*+,.\/:;<=>?@\[\]^`{|}~])/g,"\\$1")},idOrName:function(a){return this.groups[a.name]||(this.checkable(a)?a.name:a.id||a.name)},validationTargetFor:function(b){return this.checkable(b)&&(b=this.findByName(b.name)),a(b).not(this.settings.ignore)[0]},checkable:function(a){return/radio|checkbox/i.test(a.type)},findByName:function(b){return a(this.currentForm).find("[name='"+this.escapeCssMeta(b)+"']")},getLength:function(b,c){switch(c.nodeName.toLowerCase()){case"select":return a("option:selected",c).length;case"input":if(this.checkable(c))return this.findByName(c.name).filter(":checked").length}return b.length},depend:function(a,b){return!this.dependTypes[typeof a]||this.dependTypes[typeof a](a,b)},dependTypes:{"boolean":function(a){return a},string:function(b,c){return!!a(b,c.form).length},"function":function(a,b){return a(b)}},optional:function(b){var c=this.elementValue(b);return!a.validator.methods.required.call(this,c,b)&&"dependency-mismatch"},startRequest:function(b){this.pending[b.name]||(this.pendingRequest++,a(b).addClass(this.settings.pendingClass),this.pending[b.name]=!0)},stopRequest:function(b,c){this.pendingRequest--,this.pendingRequest<0&&(this.pendingRequest=0),delete this.pending[b.name],a(b).removeClass(this.settings.pendingClass),c&&0===this.pendingRequest&&this.formSubmitted&&this.form()?(a(this.currentForm).submit(),this.submitButton&&a("input:hidden[name='"+this.submitButton.name+"']",this.currentForm).remove(),this.formSubmitted=!1):!c&&0===this.pendingRequest&&this.formSubmitted&&(a(this.currentForm).triggerHandler("invalid-form",[this]),this.formSubmitted=!1)},previousValue:function(b,c){return c="string"==typeof c&&c||"remote",a.data(b,"previousValue")||a.data(b,"previousValue",{old:null,valid:!0,message:this.defaultMessage(b,{method:c})})},destroy:function(){this.resetForm(),a(this.currentForm).off(".validate").removeData("validator").find(".validate-equalTo-blur").off(".validate-equalTo").removeClass("validate-equalTo-blur")}},classRuleSettings:{required:{required:!0},email:{email:!0},url:{url:!0},date:{date:!0},dateISO:{dateISO:!0},number:{number:!0},digits:{digits:!0},creditcard:{creditcard:!0}},addClassRules:function(b,c){b.constructor===String?this.classRuleSettings[b]=c:a.extend(this.classRuleSettings,b)},classRules:function(b){var c={},d=a(b).attr("class");return d&&a.each(d.split(" "),function(){this in a.validator.classRuleSettings&&a.extend(c,a.validator.classRuleSettings[this])}),c},normalizeAttributeRule:function(a,b,c,d){/min|max|step/.test(c)&&(null===b||/number|range|text/.test(b))&&(d=Number(d),isNaN(d)&&(d=void 0)),d||0===d?a[c]=d:b===c&&"range"!==b&&(a[c]=!0)},attributeRules:function(b){var c,d,e={},f=a(b),g=b.getAttribute("type");for(c in a.validator.methods)"required"===c?(d=b.getAttribute(c),""===d&&(d=!0),d=!!d):d=f.attr(c),this.normalizeAttributeRule(e,g,c,d);return e.maxlength&&/-1|2147483647|524288/.test(e.maxlength)&&delete e.maxlength,e},dataRules:function(b){var c,d,e={},f=a(b),g=b.getAttribute("type");for(c in a.validator.methods)d=f.data("rule"+c.charAt(0).toUpperCase()+c.substring(1).toLowerCase()),this.normalizeAttributeRule(e,g,c,d);return e},staticRules:function(b){var c={},d=a.data(b.form,"validator");return d.settings.rules&&(c=a.validator.normalizeRule(d.settings.rules[b.name])||{}),c},normalizeRules:function(b,c){return a.each(b,function(d,e){if(e===!1)return void delete b[d];if(e.param||e.depends){var f=!0;switch(typeof e.depends){case"string":f=!!a(e.depends,c.form).length;break;case"function":f=e.depends.call(c,c)}f?b[d]=void 0===e.param||e.param:(a.data(c.form,"validator").resetElements(a(c)),delete b[d])}}),a.each(b,function(d,e){b[d]=a.isFunction(e)&&"normalizer"!==d?e(c):e}),a.each(["minlength","maxlength"],function(){b[this]&&(b[this]=Number(b[this]))}),a.each(["rangelength","range"],function(){var c;b[this]&&(a.isArray(b[this])?b[this]=[Number(b[this][0]),Number(b[this][1])]:"string"==typeof b[this]&&(c=b[this].replace(/[\[\]]/g,"").split(/[\s,]+/),b[this]=[Number(c[0]),Number(c[1])]))}),a.validator.autoCreateRanges&&(null!=b.min&&null!=b.max&&(b.range=[b.min,b.max],delete b.min,delete b.max),null!=b.minlength&&null!=b.maxlength&&(b.rangelength=[b.minlength,b.maxlength],delete b.minlength,delete b.maxlength)),b},normalizeRule:function(b){if("string"==typeof b){var c={};a.each(b.split(/\s/),function(){c[this]=!0}),b=c}return b},addMethod:function(b,c,d){a.validator.methods[b]=c,a.validator.messages[b]=void 0!==d?d:a.validator.messages[b],c.length<3&&a.validator.addClassRules(b,a.validator.normalizeRule(b))},methods:{required:function(b,c,d){if(!this.depend(d,c))return"dependency-mismatch";if("select"===c.nodeName.toLowerCase()){var e=a(c).val();return e&&e.length>0}return this.checkable(c)?this.getLength(b,c)>0:b.length>0},email:function(a,b){return this.optional(b)||/^[a-zA-Z0-9.!#$%&'*+\/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/.test(a)},url:function(a,b){return this.optional(b)||/^(?:(?:(?:https?|ftp):)?\/\/)(?:\S+(?::\S*)?@)?(?:(?!(?:10|127)(?:\.\d{1,3}){3})(?!(?:169\.254|192\.168)(?:\.\d{1,3}){2})(?!172\.(?:1[6-9]|2\d|3[0-1])(?:\.\d{1,3}){2})(?:[1-9]\d?|1\d\d|2[01]\d|22[0-3])(?:\.(?:1?\d{1,2}|2[0-4]\d|25[0-5])){2}(?:\.(?:[1-9]\d?|1\d\d|2[0-4]\d|25[0-4]))|(?:(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)(?:\.(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)*(?:\.(?:[a-z\u00a1-\uffff]{2,})).?)(?::\d{2,5})?(?:[\/?#]\S*)?$/i.test(a)},date:function(a,b){return this.optional(b)||!/Invalid|NaN/.test(new Date(a).toString())},dateISO:function(a,b){return this.optional(b)||/^\d{4}[\/\-](0?[1-9]|1[012])[\/\-](0?[1-9]|[12][0-9]|3[01])$/.test(a)},number:function(a,b){return this.optional(b)||/^(?:-?\d+|-?\d{1,3}(?:,\d{3})+)?(?:\.\d+)?$/.test(a)},digits:function(a,b){return this.optional(b)||/^\d+$/.test(a)},minlength:function(b,c,d){var e=a.isArray(b)?b.length:this.getLength(b,c);return this.optional(c)||e>=d},maxlength:function(b,c,d){var e=a.isArray(b)?b.length:this.getLength(b,c);return this.optional(c)||e<=d},rangelength:function(b,c,d){var e=a.isArray(b)?b.length:this.getLength(b,c);return this.optional(c)||e>=d[0]&&e<=d[1]},min:function(a,b,c){return this.optional(b)||a>=c},max:function(a,b,c){return this.optional(b)||a<=c},range:function(a,b,c){return this.optional(b)||a>=c[0]&&a<=c[1]},step:function(b,c,d){var e,f=a(c).attr("type"),g="Step attribute on input type "+f+" is not supported.",h=["text","number","range"],i=new RegExp("\\b"+f+"\\b"),j=f&&!i.test(h.join()),k=function(a){var b=(""+a).match(/(?:\.(\d+))?$/);return b&&b[1]?b[1].length:0},l=function(a){return Math.round(a*Math.pow(10,e))},m=!0;if(j)throw new Error(g);return e=k(d),(k(b)>e||l(b)%l(d)!==0)&&(m=!1),this.optional(c)||m},equalTo:function(b,c,d){var e=a(d);return this.settings.onfocusout&&e.not(".validate-equalTo-blur").length&&e.addClass("validate-equalTo-blur").on("blur.validate-equalTo",function(){a(c).valid()}),b===e.val()},remote:function(b,c,d,e){if(this.optional(c))return"dependency-mismatch";e="string"==typeof e&&e||"remote";var f,g,h,i=this.previousValue(c,e);return this.settings.messages[c.name]||(this.settings.messages[c.name]={}),i.originalMessage=i.originalMessage||this.settings.messages[c.name][e],this.settings.messages[c.name][e]=i.message,d="string"==typeof d&&{url:d}||d,h=a.param(a.extend({data:b},d.data)),i.old===h?i.valid:(i.old=h,f=this,this.startRequest(c),g={},g[c.name]=b,a.ajax(a.extend(!0,{mode:"abort",port:"validate"+c.name,dataType:"json",data:g,context:f.currentForm,success:function(a){var d,g,h,j=a===!0||"true"===a;f.settings.messages[c.name][e]=i.originalMessage,j?(h=f.formSubmitted,f.resetInternals(),f.toHide=f.errorsFor(c),f.formSubmitted=h,f.successList.push(c),f.invalid[c.name]=!1,f.showErrors()):(d={},g=a||f.defaultMessage(c,{method:e,parameters:b}),d[c.name]=i.message=g,f.invalid[c.name]=!0,f.showErrors(d)),i.valid=j,f.stopRequest(c,j)}},d)),"pending")}}});var b,c={};return a.ajaxPrefilter?a.ajaxPrefilter(function(a,b,d){var e=a.port;"abort"===a.mode&&(c[e]&&c[e].abort(),c[e]=d)}):(b=a.ajax,a.ajax=function(d){var e=("mode"in d?d:a.ajaxSettings).mode,f=("port"in d?d:a.ajaxSettings).port;return"abort"===e?(c[f]&&c[f].abort(),c[f]=b.apply(this,arguments),c[f]):b.apply(this,arguments)}),a});
+</script>
+
+<!-- Base converter -->
+<script type="text/javascript">
+  /**
+ * A function for converting hex <-> dec w/o loss of precision.
+ *
+ * The problem is that parseInt("0x12345...") isn't precise enough to convert
+ * 64-bit integers correctly.
+ *
+ * Internally, this uses arrays to encode decimal digits starting with the least
+ * significant:
+ * 8 = [8]
+ * 16 = [6, 1]
+ * 1024 = [4, 2, 0, 1]
+ */
+
+// Adds two arrays for the given base (10 or 16), returning the result.
+// This turns out to be the only "primitive" operation we need.
+function add(x, y, base) {
+  var z = [];
+  var n = Math.max(x.length, y.length);
+  var carry = 0;
+  var i = 0;
+  while (i < n || carry) {
+    var xi = i < x.length ? x[i] : 0;
+    var yi = i < y.length ? y[i] : 0;
+    var zi = carry + xi + yi;
+    z.push(zi % base);
+    carry = Math.floor(zi / base);
+    i++;
+  }
+  return z;
+}
+
+// Returns a*x, where x is an array of decimal digits and a is an ordinary
+// JavaScript number. base is the number base of the array x.
+function multiplyByNumber(num, x, base) {
+  if (num < 0) return null;
+  if (num == 0) return [];
+
+  var result = [];
+  var power = x;
+  while (true) {
+    if (num & 1) {
+      result = add(result, power, base);
+    }
+    num = num >> 1;
+    if (num === 0) break;
+    power = add(power, power, base);
+  }
+
+  return result;
+}
+
+function parseToDigitsArray(str, base) {
+  var digits = str.split('');
+  var ary = [];
+  for (var i = digits.length - 1; i >= 0; i--) {
+    var n = parseInt(digits[i], base);
+    if (isNaN(n)) return null;
+    ary.push(n);
+  }
+  return ary;
+}
+
+function convertBase(str, fromBase, toBase) {
+  var digits = parseToDigitsArray(str, fromBase);
+  if (digits === null) return null;
+
+  var outArray = [];
+  var power = [1];
+  for (var i = 0; i < digits.length; i++) {
+    // invariant: at this point, fromBase^i = power
+    if (digits[i]) {
+      outArray = add(outArray, multiplyByNumber(digits[i], power, toBase), toBase);
+    }
+    power = multiplyByNumber(fromBase, power, toBase);
+  }
+
+  var out = '';
+  for (var i = outArray.length - 1; i >= 0; i--) {
+    out += outArray[i].toString(toBase);
+  }
+  return out;
+}
+
+function decToHex(decStr) {
+  var hex = convertBase(decStr, 10, 16);
+  return hex ? '0x' + hex : null;
+}
+
+function hexToDec(hexStr) {
+  if (hexStr.substring(0, 2) === '0x') hexStr = hexStr.substring(2);
+  hexStr = hexStr.toLowerCase();
+  return convertBase(hexStr, 16, 10);
+}
+</script>
+
+<!-- cashaddr JS -->
+<script type="text/javascript">
+  /**
+ * @license
+ * https://github.com/bitcoincashjs/cashaddr
+ * Copyright (c) 2017 Emilio Almansi
+ * Distributed under the MIT software license, see the accompanying
+ * file LICENSE or http://www.opensource.org/licenses/mit-license.php.
+ */
+!function(f){if("object"==typeof exports&&"undefined"!=typeof module)module.exports=f();else if("function"==typeof define&&define.amd)define([],f);else{("undefined"!=typeof window?window:"undefined"!=typeof global?global:"undefined"!=typeof self?self:this).cashaddr=f()}}(function(){return function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a="function"==typeof require&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n||e)},l,l.exports,e,t,n,r)}return n[o].exports}for(var i="function"==typeof require&&require,o=0;o<r.length;o++)s(r[o]);return s}({1:[function(require,module,exports){var bigInt=function(undefined){"use strict";var BASE=1e7,LOG_BASE=7,MAX_INT=9007199254740992,MAX_INT_ARR=smallToArray(MAX_INT),LOG_MAX_INT=Math.log(MAX_INT);function Integer(v,radix){return void 0===v?Integer[0]:void 0!==radix?10==+radix?parseValue(v):parseBase(v,radix):parseValue(v)}function BigInteger(value,sign){this.value=value,this.sign=sign,this.isSmall=!1}function SmallInteger(value){this.value=value,this.sign=value<0,this.isSmall=!0}function isPrecise(n){return-MAX_INT<n&&n<MAX_INT}function smallToArray(n){return n<1e7?[n]:n<1e14?[n%1e7,Math.floor(n/1e7)]:[n%1e7,Math.floor(n/1e7)%1e7,Math.floor(n/1e14)]}function arrayToSmall(arr){trim(arr);var length=arr.length;if(length<4&&compareAbs(arr,MAX_INT_ARR)<0)switch(length){case 0:return 0;case 1:return arr[0];case 2:return arr[0]+arr[1]*BASE;default:return arr[0]+(arr[1]+arr[2]*BASE)*BASE}return arr}function trim(v){for(var i=v.length;0===v[--i];);v.length=i+1}function createArray(length){for(var x=new Array(length),i=-1;++i<length;)x[i]=0;return x}function truncate(n){return n>0?Math.floor(n):Math.ceil(n)}function add(a,b){var sum,i,l_a=a.length,l_b=b.length,r=new Array(l_a),carry=0,base=BASE;for(i=0;i<l_b;i++)carry=(sum=a[i]+b[i]+carry)>=base?1:0,r[i]=sum-carry*base;for(;i<l_a;)carry=(sum=a[i]+carry)===base?1:0,r[i++]=sum-carry*base;return carry>0&&r.push(carry),r}function addAny(a,b){return a.length>=b.length?add(a,b):add(b,a)}function addSmall(a,carry){var sum,i,l=a.length,r=new Array(l),base=BASE;for(i=0;i<l;i++)sum=a[i]-base+carry,carry=Math.floor(sum/base),r[i]=sum-carry*base,carry+=1;for(;carry>0;)r[i++]=carry%base,carry=Math.floor(carry/base);return r}function subtract(a,b){var i,difference,a_l=a.length,b_l=b.length,r=new Array(a_l),borrow=0,base=BASE;for(i=0;i<b_l;i++)(difference=a[i]-borrow-b[i])<0?(difference+=base,borrow=1):borrow=0,r[i]=difference;for(i=b_l;i<a_l;i++){if(!((difference=a[i]-borrow)<0)){r[i++]=difference;break}difference+=base,r[i]=difference}for(;i<a_l;i++)r[i]=a[i];return trim(r),r}function subtractSmall(a,b,sign){var i,difference,l=a.length,r=new Array(l),carry=-b,base=BASE;for(i=0;i<l;i++)difference=a[i]+carry,carry=Math.floor(difference/base),difference%=base,r[i]=difference<0?difference+base:difference;return"number"==typeof(r=arrayToSmall(r))?(sign&&(r=-r),new SmallInteger(r)):new BigInteger(r,sign)}function multiplyLong(a,b){var product,carry,i,a_i,a_l=a.length,b_l=b.length,r=createArray(a_l+b_l),base=BASE;for(i=0;i<a_l;++i){a_i=a[i];for(var j=0;j<b_l;++j)product=a_i*b[j]+r[i+j],carry=Math.floor(product/base),r[i+j]=product-carry*base,r[i+j+1]+=carry}return trim(r),r}function multiplySmall(a,b){var product,i,l=a.length,r=new Array(l),base=BASE,carry=0;for(i=0;i<l;i++)product=a[i]*b+carry,carry=Math.floor(product/base),r[i]=product-carry*base;for(;carry>0;)r[i++]=carry%base,carry=Math.floor(carry/base);return r}function shiftLeft(x,n){for(var r=[];n-- >0;)r.push(0);return r.concat(x)}function multiplySmallAndArray(a,b,sign){return new BigInteger(a<BASE?multiplySmall(b,a):multiplyLong(b,smallToArray(a)),sign)}function square(a){var product,carry,i,a_i,l=a.length,r=createArray(l+l),base=BASE;for(i=0;i<l;i++){a_i=a[i];for(var j=0;j<l;j++)product=a_i*a[j]+r[i+j],carry=Math.floor(product/base),r[i+j]=product-carry*base,r[i+j+1]+=carry}return trim(r),r}function divModSmall(value,lambda){var i,q,remainder,divisor,length=value.length,quotient=createArray(length),base=BASE;for(remainder=0,i=length-1;i>=0;--i)remainder=(divisor=remainder*base+value[i])-(q=truncate(divisor/lambda))*lambda,quotient[i]=0|q;return[quotient,0|remainder]}function divModAny(self,v){var value,quotient,n=parseValue(v),a=self.value,b=n.value;if(0===b)throw new Error("Cannot divide by zero");if(self.isSmall)return n.isSmall?[new SmallInteger(truncate(a/b)),new SmallInteger(a%b)]:[Integer[0],self];if(n.isSmall){if(1===b)return[self,Integer[0]];if(-1==b)return[self.negate(),Integer[0]];var abs=Math.abs(b);if(abs<BASE){quotient=arrayToSmall((value=divModSmall(a,abs))[0]);var remainder=value[1];return self.sign&&(remainder=-remainder),"number"==typeof quotient?(self.sign!==n.sign&&(quotient=-quotient),[new SmallInteger(quotient),new SmallInteger(remainder)]):[new BigInteger(quotient,self.sign!==n.sign),new SmallInteger(remainder)]}b=smallToArray(abs)}var comparison=compareAbs(a,b);if(-1===comparison)return[Integer[0],self];if(0===comparison)return[Integer[self.sign===n.sign?1:-1],Integer[0]];quotient=(value=a.length+b.length<=200?function(a,b){var quotientDigit,shift,carry,borrow,i,l,q,a_l=a.length,b_l=b.length,base=BASE,result=createArray(b.length),divisorMostSignificantDigit=b[b_l-1],lambda=Math.ceil(base/(2*divisorMostSignificantDigit)),remainder=multiplySmall(a,lambda),divisor=multiplySmall(b,lambda);for(remainder.length<=a_l&&remainder.push(0),divisor.push(0),divisorMostSignificantDigit=divisor[b_l-1],shift=a_l-b_l;shift>=0;shift--){for(quotientDigit=base-1,remainder[shift+b_l]!==divisorMostSignificantDigit&&(quotientDigit=Math.floor((remainder[shift+b_l]*base+remainder[shift+b_l-1])/divisorMostSignificantDigit)),carry=0,borrow=0,l=divisor.length,i=0;i<l;i++)carry+=quotientDigit*divisor[i],q=Math.floor(carry/base),borrow+=remainder[shift+i]-(carry-q*base),carry=q,borrow<0?(remainder[shift+i]=borrow+base,borrow=-1):(remainder[shift+i]=borrow,borrow=0);for(;0!==borrow;){for(quotientDigit-=1,carry=0,i=0;i<l;i++)(carry+=remainder[shift+i]-base+divisor[i])<0?(remainder[shift+i]=carry+base,carry=0):(remainder[shift+i]=carry,carry=1);borrow+=carry}result[shift]=quotientDigit}return remainder=divModSmall(remainder,lambda)[0],[arrayToSmall(result),arrayToSmall(remainder)]}(a,b):function(a,b){for(var guess,xlen,highx,highy,check,a_l=a.length,b_l=b.length,result=[],part=[],base=BASE;a_l;)if(part.unshift(a[--a_l]),trim(part),compareAbs(part,b)<0)result.push(0);else{highx=part[(xlen=part.length)-1]*base+part[xlen-2],highy=b[b_l-1]*base+b[b_l-2],xlen>b_l&&(highx=(highx+1)*base),guess=Math.ceil(highx/highy);do{if(compareAbs(check=multiplySmall(b,guess),part)<=0)break;guess--}while(guess);result.push(guess),part=subtract(part,check)}return result.reverse(),[arrayToSmall(result),arrayToSmall(part)]}(a,b))[0];var qSign=self.sign!==n.sign,mod=value[1],mSign=self.sign;return"number"==typeof quotient?(qSign&&(quotient=-quotient),quotient=new SmallInteger(quotient)):quotient=new BigInteger(quotient,qSign),"number"==typeof mod?(mSign&&(mod=-mod),mod=new SmallInteger(mod)):mod=new BigInteger(mod,mSign),[quotient,mod]}function compareAbs(a,b){if(a.length!==b.length)return a.length>b.length?1:-1;for(var i=a.length-1;i>=0;i--)if(a[i]!==b[i])return a[i]>b[i]?1:-1;return 0}function isBasicPrime(v){var n=v.abs();return!n.isUnit()&&(!!(n.equals(2)||n.equals(3)||n.equals(5))||!(n.isEven()||n.isDivisibleBy(3)||n.isDivisibleBy(5))&&(!!n.lesser(25)||void 0))}BigInteger.prototype=Object.create(Integer.prototype),SmallInteger.prototype=Object.create(Integer.prototype),BigInteger.prototype.add=function(v){var n=parseValue(v);if(this.sign!==n.sign)return this.subtract(n.negate());var a=this.value,b=n.value;return n.isSmall?new BigInteger(addSmall(a,Math.abs(b)),this.sign):new BigInteger(addAny(a,b),this.sign)},BigInteger.prototype.plus=BigInteger.prototype.add,SmallInteger.prototype.add=function(v){var n=parseValue(v),a=this.value;if(a<0!==n.sign)return this.subtract(n.negate());var b=n.value;if(n.isSmall){if(isPrecise(a+b))return new SmallInteger(a+b);b=smallToArray(Math.abs(b))}return new BigInteger(addSmall(b,Math.abs(a)),a<0)},SmallInteger.prototype.plus=SmallInteger.prototype.add,BigInteger.prototype.subtract=function(v){var n=parseValue(v);if(this.sign!==n.sign)return this.add(n.negate());var a=this.value,b=n.value;return n.isSmall?subtractSmall(a,Math.abs(b),this.sign):function(a,b,sign){var value;return compareAbs(a,b)>=0?value=subtract(a,b):(value=subtract(b,a),sign=!sign),"number"==typeof(value=arrayToSmall(value))?(sign&&(value=-value),new SmallInteger(value)):new BigInteger(value,sign)}(a,b,this.sign)},BigInteger.prototype.minus=BigInteger.prototype.subtract,SmallInteger.prototype.subtract=function(v){var n=parseValue(v),a=this.value;if(a<0!==n.sign)return this.add(n.negate());var b=n.value;return n.isSmall?new SmallInteger(a-b):subtractSmall(b,Math.abs(a),a>=0)},SmallInteger.prototype.minus=SmallInteger.prototype.subtract,BigInteger.prototype.negate=function(){return new BigInteger(this.value,!this.sign)},SmallInteger.prototype.negate=function(){var sign=this.sign,small=new SmallInteger(-this.value);return small.sign=!sign,small},BigInteger.prototype.abs=function(){return new BigInteger(this.value,!1)},SmallInteger.prototype.abs=function(){return new SmallInteger(Math.abs(this.value))},BigInteger.prototype.multiply=function(v){var abs,l1,l2,n=parseValue(v),a=this.value,b=n.value,sign=this.sign!==n.sign;if(n.isSmall){if(0===b)return Integer[0];if(1===b)return this;if(-1===b)return this.negate();if((abs=Math.abs(b))<BASE)return new BigInteger(multiplySmall(a,abs),sign);b=smallToArray(abs)}return l1=a.length,l2=b.length,new BigInteger(-.012*l1-.012*l2+15e-6*l1*l2>0?function multiplyKaratsuba(x,y){var n=Math.max(x.length,y.length);if(n<=30)return multiplyLong(x,y);n=Math.ceil(n/2);var b=x.slice(n),a=x.slice(0,n),d=y.slice(n),c=y.slice(0,n),ac=multiplyKaratsuba(a,c),bd=multiplyKaratsuba(b,d),product=addAny(addAny(ac,shiftLeft(subtract(subtract(multiplyKaratsuba(addAny(a,b),addAny(c,d)),ac),bd),n)),shiftLeft(bd,2*n));return trim(product),product}(a,b):multiplyLong(a,b),sign)},BigInteger.prototype.times=BigInteger.prototype.multiply,SmallInteger.prototype._multiplyBySmall=function(a){return isPrecise(a.value*this.value)?new SmallInteger(a.value*this.value):multiplySmallAndArray(Math.abs(a.value),smallToArray(Math.abs(this.value)),this.sign!==a.sign)},BigInteger.prototype._multiplyBySmall=function(a){return 0===a.value?Integer[0]:1===a.value?this:-1===a.value?this.negate():multiplySmallAndArray(Math.abs(a.value),this.value,this.sign!==a.sign)},SmallInteger.prototype.multiply=function(v){return parseValue(v)._multiplyBySmall(this)},SmallInteger.prototype.times=SmallInteger.prototype.multiply,BigInteger.prototype.square=function(){return new BigInteger(square(this.value),!1)},SmallInteger.prototype.square=function(){var value=this.value*this.value;return isPrecise(value)?new SmallInteger(value):new BigInteger(square(smallToArray(Math.abs(this.value))),!1)},BigInteger.prototype.divmod=function(v){var result=divModAny(this,v);return{quotient:result[0],remainder:result[1]}},SmallInteger.prototype.divmod=BigInteger.prototype.divmod,BigInteger.prototype.divide=function(v){return divModAny(this,v)[0]},SmallInteger.prototype.over=SmallInteger.prototype.divide=BigInteger.prototype.over=BigInteger.prototype.divide,BigInteger.prototype.mod=function(v){return divModAny(this,v)[1]},SmallInteger.prototype.remainder=SmallInteger.prototype.mod=BigInteger.prototype.remainder=BigInteger.prototype.mod,BigInteger.prototype.pow=function(v){var value,x,y,n=parseValue(v),a=this.value,b=n.value;if(0===b)return Integer[1];if(0===a)return Integer[0];if(1===a)return Integer[1];if(-1===a)return n.isEven()?Integer[1]:Integer[-1];if(n.sign)return Integer[0];if(!n.isSmall)throw new Error("The exponent "+n.toString()+" is too large.");if(this.isSmall&&isPrecise(value=Math.pow(a,b)))return new SmallInteger(truncate(value));for(x=this,y=Integer[1];!0&b&&(y=y.times(x),--b),0!==b;)b/=2,x=x.square();return y},SmallInteger.prototype.pow=BigInteger.prototype.pow,BigInteger.prototype.modPow=function(exp,mod){if(exp=parseValue(exp),(mod=parseValue(mod)).isZero())throw new Error("Cannot take modPow with modulus 0");for(var r=Integer[1],base=this.mod(mod);exp.isPositive();){if(base.isZero())return Integer[0];exp.isOdd()&&(r=r.multiply(base).mod(mod)),exp=exp.divide(2),base=base.square().mod(mod)}return r},SmallInteger.prototype.modPow=BigInteger.prototype.modPow,BigInteger.prototype.compareAbs=function(v){var n=parseValue(v),a=this.value,b=n.value;return n.isSmall?1:compareAbs(a,b)},SmallInteger.prototype.compareAbs=function(v){var n=parseValue(v),a=Math.abs(this.value),b=n.value;return n.isSmall?a===(b=Math.abs(b))?0:a>b?1:-1:-1},BigInteger.prototype.compare=function(v){if(v===1/0)return-1;if(v===-1/0)return 1;var n=parseValue(v),a=this.value,b=n.value;return this.sign!==n.sign?n.sign?1:-1:n.isSmall?this.sign?-1:1:compareAbs(a,b)*(this.sign?-1:1)},BigInteger.prototype.compareTo=BigInteger.prototype.compare,SmallInteger.prototype.compare=function(v){if(v===1/0)return-1;if(v===-1/0)return 1;var n=parseValue(v),a=this.value,b=n.value;return n.isSmall?a==b?0:a>b?1:-1:a<0!==n.sign?a<0?-1:1:a<0?1:-1},SmallInteger.prototype.compareTo=SmallInteger.prototype.compare,BigInteger.prototype.equals=function(v){return 0===this.compare(v)},SmallInteger.prototype.eq=SmallInteger.prototype.equals=BigInteger.prototype.eq=BigInteger.prototype.equals,BigInteger.prototype.notEquals=function(v){return 0!==this.compare(v)},SmallInteger.prototype.neq=SmallInteger.prototype.notEquals=BigInteger.prototype.neq=BigInteger.prototype.notEquals,BigInteger.prototype.greater=function(v){return this.compare(v)>0},SmallInteger.prototype.gt=SmallInteger.prototype.greater=BigInteger.prototype.gt=BigInteger.prototype.greater,BigInteger.prototype.lesser=function(v){return this.compare(v)<0},SmallInteger.prototype.lt=SmallInteger.prototype.lesser=BigInteger.prototype.lt=BigInteger.prototype.lesser,BigInteger.prototype.greaterOrEquals=function(v){return this.compare(v)>=0},SmallInteger.prototype.geq=SmallInteger.prototype.greaterOrEquals=BigInteger.prototype.geq=BigInteger.prototype.greaterOrEquals,BigInteger.prototype.lesserOrEquals=function(v){return this.compare(v)<=0},SmallInteger.prototype.leq=SmallInteger.prototype.lesserOrEquals=BigInteger.prototype.leq=BigInteger.prototype.lesserOrEquals,BigInteger.prototype.isEven=function(){return 0==(1&this.value[0])},SmallInteger.prototype.isEven=function(){return 0==(1&this.value)},BigInteger.prototype.isOdd=function(){return 1==(1&this.value[0])},SmallInteger.prototype.isOdd=function(){return 1==(1&this.value)},BigInteger.prototype.isPositive=function(){return!this.sign},SmallInteger.prototype.isPositive=function(){return this.value>0},BigInteger.prototype.isNegative=function(){return this.sign},SmallInteger.prototype.isNegative=function(){return this.value<0},BigInteger.prototype.isUnit=function(){return!1},SmallInteger.prototype.isUnit=function(){return 1===Math.abs(this.value)},BigInteger.prototype.isZero=function(){return!1},SmallInteger.prototype.isZero=function(){return 0===this.value},BigInteger.prototype.isDivisibleBy=function(v){var n=parseValue(v),value=n.value;return 0!==value&&(1===value||(2===value?this.isEven():this.mod(n).equals(Integer[0])))},SmallInteger.prototype.isDivisibleBy=BigInteger.prototype.isDivisibleBy,BigInteger.prototype.isPrime=function(){var isPrime=isBasicPrime(this);if(void 0!==isPrime)return isPrime;for(var d,t,i,x,n=this.abs(),nPrev=n.prev(),a=[2,3,5,7,11,13,17,19],b=nPrev;b.isEven();)b=b.divide(2);for(i=0;i<a.length;i++)if(!(x=bigInt(a[i]).modPow(b,n)).equals(Integer[1])&&!x.equals(nPrev)){for(t=!0,d=b;t&&d.lesser(nPrev);d=d.multiply(2))(x=x.square().mod(n)).equals(nPrev)&&(t=!1);if(t)return!1}return!0},SmallInteger.prototype.isPrime=BigInteger.prototype.isPrime,BigInteger.prototype.isProbablePrime=function(iterations){var isPrime=isBasicPrime(this);if(void 0!==isPrime)return isPrime;for(var n=this.abs(),t=void 0===iterations?5:iterations,i=0;i<t;i++){if(!bigInt.randBetween(2,n.minus(2)).modPow(n.prev(),n).isUnit())return!1}return!0},SmallInteger.prototype.isProbablePrime=BigInteger.prototype.isProbablePrime,BigInteger.prototype.modInv=function(n){for(var q,lastT,lastR,t=bigInt.zero,newT=bigInt.one,r=parseValue(n),newR=this.abs();!newR.equals(bigInt.zero);)q=r.divide(newR),lastT=t,lastR=r,t=newT,r=newR,newT=lastT.subtract(q.multiply(newT)),newR=lastR.subtract(q.multiply(newR));if(!r.equals(1))throw new Error(this.toString()+" and "+n.toString()+" are not co-prime");return-1===t.compare(0)&&(t=t.add(n)),this.isNegative()?t.negate():t},SmallInteger.prototype.modInv=BigInteger.prototype.modInv,BigInteger.prototype.next=function(){var value=this.value;return this.sign?subtractSmall(value,1,this.sign):new BigInteger(addSmall(value,1),this.sign)},SmallInteger.prototype.next=function(){var value=this.value;return value+1<MAX_INT?new SmallInteger(value+1):new BigInteger(MAX_INT_ARR,!1)},BigInteger.prototype.prev=function(){var value=this.value;return this.sign?new BigInteger(addSmall(value,1),!0):subtractSmall(value,1,this.sign)},SmallInteger.prototype.prev=function(){var value=this.value;return value-1>-MAX_INT?new SmallInteger(value-1):new BigInteger(MAX_INT_ARR,!0)};for(var powersOfTwo=[1];2*powersOfTwo[powersOfTwo.length-1]<=BASE;)powersOfTwo.push(2*powersOfTwo[powersOfTwo.length-1]);var powers2Length=powersOfTwo.length,highestPower2=powersOfTwo[powers2Length-1];function shift_isSmall(n){return("number"==typeof n||"string"==typeof n)&&+Math.abs(n)<=BASE||n instanceof BigInteger&&n.value.length<=1}function bitwise(x,y,fn){y=parseValue(y);for(var xSign=x.isNegative(),ySign=y.isNegative(),xRem=xSign?x.not():x,yRem=ySign?y.not():y,xDigit=0,yDigit=0,xDivMod=null,yDivMod=null,result=[];!xRem.isZero()||!yRem.isZero();)xDigit=(xDivMod=divModAny(xRem,highestPower2))[1].toJSNumber(),xSign&&(xDigit=highestPower2-1-xDigit),yDigit=(yDivMod=divModAny(yRem,highestPower2))[1].toJSNumber(),ySign&&(yDigit=highestPower2-1-yDigit),xRem=xDivMod[0],yRem=yDivMod[0],result.push(fn(xDigit,yDigit));for(var sum=0!==fn(xSign?1:0,ySign?1:0)?bigInt(-1):bigInt(0),i=result.length-1;i>=0;i-=1)sum=sum.multiply(highestPower2).add(bigInt(result[i]));return sum}BigInteger.prototype.shiftLeft=function(n){if(!shift_isSmall(n))throw new Error(String(n)+" is too large for shifting.");if((n=+n)<0)return this.shiftRight(-n);for(var result=this;n>=powers2Length;)result=result.multiply(highestPower2),n-=powers2Length-1;return result.multiply(powersOfTwo[n])},SmallInteger.prototype.shiftLeft=BigInteger.prototype.shiftLeft,BigInteger.prototype.shiftRight=function(n){var remQuo;if(!shift_isSmall(n))throw new Error(String(n)+" is too large for shifting.");if((n=+n)<0)return this.shiftLeft(-n);for(var result=this;n>=powers2Length;){if(result.isZero())return result;result=(remQuo=divModAny(result,highestPower2))[1].isNegative()?remQuo[0].prev():remQuo[0],n-=powers2Length-1}return(remQuo=divModAny(result,powersOfTwo[n]))[1].isNegative()?remQuo[0].prev():remQuo[0]},SmallInteger.prototype.shiftRight=BigInteger.prototype.shiftRight,BigInteger.prototype.not=function(){return this.negate().prev()},SmallInteger.prototype.not=BigInteger.prototype.not,BigInteger.prototype.and=function(n){return bitwise(this,n,function(a,b){return a&b})},SmallInteger.prototype.and=BigInteger.prototype.and,BigInteger.prototype.or=function(n){return bitwise(this,n,function(a,b){return a|b})},SmallInteger.prototype.or=BigInteger.prototype.or,BigInteger.prototype.xor=function(n){return bitwise(this,n,function(a,b){return a^b})},SmallInteger.prototype.xor=BigInteger.prototype.xor;var LOBMASK_I=1<<30,LOBMASK_BI=(BASE&-BASE)*(BASE&-BASE)|LOBMASK_I;function roughLOB(n){var v=n.value,x="number"==typeof v?v|LOBMASK_I:v[0]+v[1]*BASE|LOBMASK_BI;return x&-x}function max(a,b){return a=parseValue(a),b=parseValue(b),a.greater(b)?a:b}function min(a,b){return a=parseValue(a),b=parseValue(b),a.lesser(b)?a:b}function gcd(a,b){if(a=parseValue(a).abs(),b=parseValue(b).abs(),a.equals(b))return a;if(a.isZero())return b;if(b.isZero())return a;for(var d,t,c=Integer[1];a.isEven()&&b.isEven();)d=Math.min(roughLOB(a),roughLOB(b)),a=a.divide(d),b=b.divide(d),c=c.multiply(d);for(;a.isEven();)a=a.divide(roughLOB(a));do{for(;b.isEven();)b=b.divide(roughLOB(b));a.greater(b)&&(t=b,b=a,a=t),b=b.subtract(a)}while(!b.isZero());return c.isUnit()?a:a.multiply(c)}var parseBase=function(text,base){for(var length=text.length,absBase=Math.abs(base),i=0;i<length;i++){if("-"!==(c=text[i].toLowerCase())&&/[a-z0-9]/.test(c)){if(/[0-9]/.test(c)&&+c>=absBase){if("1"===c&&1===absBase)continue;throw new Error(c+" is not a valid digit in base "+base+".")}if(c.charCodeAt(0)-87>=absBase)throw new Error(c+" is not a valid digit in base "+base+".")}}if(2<=base&&base<=36&&length<=LOG_MAX_INT/Math.log(base)){var result=parseInt(text,base);if(isNaN(result))throw new Error(c+" is not a valid digit in base "+base+".");return new SmallInteger(parseInt(text,base))}base=parseValue(base);var digits=[],isNegative="-"===text[0];for(i=isNegative?1:0;i<text.length;i++){var c,charCode=(c=text[i].toLowerCase()).charCodeAt(0);if(48<=charCode&&charCode<=57)digits.push(parseValue(c));else if(97<=charCode&&charCode<=122)digits.push(parseValue(c.charCodeAt(0)-87));else{if("<"!==c)throw new Error(c+" is not a valid character");var start=i;do{i++}while(">"!==text[i]);digits.push(parseValue(text.slice(start+1,i)))}}return parseBaseFromArray(digits,base,isNegative)};function parseBaseFromArray(digits,base,isNegative){var i,val=Integer[0],pow=Integer[1];for(i=digits.length-1;i>=0;i--)val=val.add(digits[i].times(pow)),pow=pow.times(base);return isNegative?val.negate():val}function stringify(digit){var v=digit.value;return"number"==typeof v&&(v=[v]),1===v.length&&v[0]<=35?"0123456789abcdefghijklmnopqrstuvwxyz".charAt(v[0]):"<"+v+">"}function toBase(n,base){if((base=bigInt(base)).isZero()){if(n.isZero())return"0";throw new Error("Cannot convert nonzero numbers to base 0.")}if(base.equals(-1))return n.isZero()?"0":n.isNegative()?new Array(1-n).join("10"):"1"+new Array(+n).join("01");var minusSign="";if(n.isNegative()&&base.isPositive()&&(minusSign="-",n=n.abs()),base.equals(1))return n.isZero()?"0":minusSign+new Array(+n+1).join(1);for(var divmod,out=[],left=n;left.isNegative()||left.compareAbs(base)>=0;){left=(divmod=left.divmod(base)).quotient;var digit=divmod.remainder;digit.isNegative()&&(digit=base.minus(digit).abs(),left=left.next()),out.push(stringify(digit))}return out.push(stringify(left)),minusSign+out.reverse().join("")}function parseStringValue(v){if(isPrecise(+v)){var x=+v;if(x===truncate(x))return new SmallInteger(x);throw"Invalid integer: "+v}var sign="-"===v[0];sign&&(v=v.slice(1));var split=v.split(/e/i);if(split.length>2)throw new Error("Invalid integer: "+split.join("e"));if(2===split.length){var exp=split[1];if("+"===exp[0]&&(exp=exp.slice(1)),(exp=+exp)!==truncate(exp)||!isPrecise(exp))throw new Error("Invalid integer: "+exp+" is not a valid exponent.");var text=split[0],decimalPlace=text.indexOf(".");if(decimalPlace>=0&&(exp-=text.length-decimalPlace-1,text=text.slice(0,decimalPlace)+text.slice(decimalPlace+1)),exp<0)throw new Error("Cannot include negative exponent part for integers");v=text+=new Array(exp+1).join("0")}if(!/^([0-9][0-9]*)$/.test(v))throw new Error("Invalid integer: "+v);for(var r=[],max=v.length,l=LOG_BASE,min=max-l;max>0;)r.push(+v.slice(min,max)),(min-=l)<0&&(min=0),max-=l;return trim(r),new BigInteger(r,sign)}function parseValue(v){return"number"==typeof v?function(v){if(isPrecise(v)){if(v!==truncate(v))throw new Error(v+" is not an integer.");return new SmallInteger(v)}return parseStringValue(v.toString())}(v):"string"==typeof v?parseStringValue(v):v}BigInteger.prototype.toString=function(radix){if(void 0===radix&&(radix=10),10!==radix)return toBase(this,radix);for(var digit,v=this.value,l=v.length,str=String(v[--l]);--l>=0;)digit=String(v[l]),str+="0000000".slice(digit.length)+digit;return(this.sign?"-":"")+str},SmallInteger.prototype.toString=function(radix){return void 0===radix&&(radix=10),10!=radix?toBase(this,radix):String(this.value)},BigInteger.prototype.toJSON=SmallInteger.prototype.toJSON=function(){return this.toString()},BigInteger.prototype.valueOf=function(){return+this.toString()},BigInteger.prototype.toJSNumber=BigInteger.prototype.valueOf,SmallInteger.prototype.valueOf=function(){return this.value},SmallInteger.prototype.toJSNumber=SmallInteger.prototype.valueOf;for(var i=0;i<1e3;i++)Integer[i]=new SmallInteger(i),i>0&&(Integer[-i]=new SmallInteger(-i));return Integer.one=Integer[1],Integer.zero=Integer[0],Integer.minusOne=Integer[-1],Integer.max=max,Integer.min=min,Integer.gcd=gcd,Integer.lcm=function(a,b){return a=parseValue(a).abs(),b=parseValue(b).abs(),a.divide(gcd(a,b)).multiply(b)},Integer.isInstance=function(x){return x instanceof BigInteger||x instanceof SmallInteger},Integer.randBetween=function(a,b){var low=min(a=parseValue(a),b=parseValue(b)),range=max(a,b).subtract(low).add(1);if(range.isSmall)return low.add(Math.floor(Math.random()*range));for(var result=[],restricted=!0,i=range.value.length-1;i>=0;i--){var top=restricted?range.value[i]:BASE,digit=truncate(Math.random()*top);result.unshift(digit),digit<top&&(restricted=!1)}return result=arrayToSmall(result),low.add("number"==typeof result?new SmallInteger(result):new BigInteger(result,!1))},Integer.fromArray=function(digits,base,isNegative){return parseBaseFromArray(digits.map(parseValue),parseValue(base||10),isNegative)},Integer}();void 0!==module&&module.hasOwnProperty("exports")&&(module.exports=bigInt)},{}],2:[function(require,module,exports){"use strict";var validate=require("./validation").validate,CHARSET="qpzry9x8gf2tvdw0s3jn54khce6mua7l",CHARSET_INVERSE_INDEX={q:0,p:1,z:2,r:3,y:4,9:5,x:6,8:7,g:8,f:9,2:10,t:11,v:12,d:13,w:14,0:15,s:16,3:17,j:18,n:19,5:20,4:21,k:22,h:23,c:24,e:25,6:26,m:27,u:28,a:29,7:30,l:31};module.exports={encode:function(data){validate(data instanceof Uint8Array,"Invalid data: "+data+".");for(var base32="",i=0;i<data.length;++i){var value=data[i];validate(0<=value&&value<32,"Invalid value: "+value+"."),base32+=CHARSET[value]}return base32},decode:function(string){validate("string"==typeof string,"Invalid base32-encoded string: "+string+".");for(var data=new Uint8Array(string.length),i=0;i<string.length;++i){var value=string[i];validate(value in CHARSET_INVERSE_INDEX,"Invalid value: "+value+"."),data[i]=CHARSET_INVERSE_INDEX[value]}return data}}},{"./validation":5}],3:[function(require,module,exports){"use strict";var base32=require("./base32"),bigInt=require("big-integer"),convertBits=require("./convertBits"),validation=require("./validation"),validate=validation.validate;var ValidationError=validation.ValidationError,VALID_PREFIXES=["bitcoincash","bchtest","bchreg"];function prefixToUint5Array(prefix){for(var result=new Uint8Array(prefix.length),i=0;i<prefix.length;++i)result[i]=31&prefix[i].charCodeAt(0);return result}function concat(a,b){var ab=new Uint8Array(a.length+b.length);return ab.set(a),ab.set(b,a.length),ab}function polymod(data){for(var GENERATOR=[656907472481,522768456162,0xf33e5fb3c4,748107326120,130178868336],checksum=bigInt(1),i=0;i<data.length;++i){var value=data[i],topBits=checksum.shiftRight(35);checksum=checksum.and(34359738367).shiftLeft(5).xor(value);for(var j=0;j<GENERATOR.length;++j)topBits.shiftRight(j).and(1).equals(1)&&(checksum=checksum.xor(GENERATOR[j]))}return checksum.xor(1)}function hasSingleCase(string){return string===string.toLowerCase()||string===string.toUpperCase()}module.exports={encode:function(prefix,type,hash){validate("string"==typeof prefix&&function(prefix){return hasSingleCase(prefix)&&-1!==VALID_PREFIXES.indexOf(prefix.toLowerCase())}(prefix),"Invalid prefix: "+prefix+"."),validate("string"==typeof type,"Invalid type: "+type+"."),validate(hash instanceof Uint8Array,"Invalid hash: "+hash+".");var data,prefixData=concat(prefixToUint5Array(prefix),new Uint8Array(1)),versionByte=function(type){switch(type){case"P2PKH":return 0;case"P2SH":return 8;default:throw new ValidationError("Invalid type: "+type+".")}}(type)+function(hash){switch(8*hash.length){case 160:return 0;case 192:return 1;case 224:return 2;case 256:return 3;case 320:return 4;case 384:return 5;case 448:return 6;case 512:return 7;default:throw new ValidationError("Invalid hash size: "+hash.length+".")}}(hash),payloadData=(data=concat(Uint8Array.of(versionByte),hash),convertBits(data,8,5)),payload=concat(payloadData,function(checksum){for(var result=new Uint8Array(8),i=0;i<8;++i)result[7-i]=checksum.and(31).toJSNumber(),checksum=checksum.shiftRight(5);return result}(polymod(concat(concat(prefixData,payloadData),new Uint8Array(8)))));return prefix+":"+base32.encode(payload)},decode:function(address){validate("string"==typeof address&&hasSingleCase(address),"Invalid address: "+address+".");var pieces=address.toLowerCase().split(":");validate(2===pieces.length,"Missing prefix: "+address+".");var prefix=pieces[0],payload=base32.decode(pieces[1]);validate(function(prefix,payload){return polymod(concat(concat(prefixToUint5Array(prefix),new Uint8Array(1)),payload)).equals(0)}(prefix,payload),"Invalid checksum: "+address+".");var data,payloadData=(data=payload.slice(0,-8),convertBits(data,5,8,!0)),versionByte=payloadData[0],hash=payloadData.slice(1);return validate(function(versionByte){switch(7&versionByte){case 0:return 160;case 1:return 192;case 2:return 224;case 3:return 256;case 4:return 320;case 5:return 384;case 6:return 448;case 7:return 512}}(versionByte)===8*hash.length,"Invalid hash size: "+address+"."),{prefix:prefix,type:function(versionByte){switch(120&versionByte){case 0:return"P2PKH";case 8:return"P2SH";default:throw new ValidationError("Invalid address type in version byte: "+versionByte+".")}}(versionByte),hash:hash}},ValidationError:ValidationError}},{"./base32":2,"./convertBits":4,"./validation":5,"big-integer":1}],4:[function(require,module,exports){"use strict";var validate=require("./validation").validate;module.exports=function(data,from,to,strictMode){for(var length=strictMode?Math.floor(data.length*from/to):Math.ceil(data.length*from/to),mask=(1<<to)-1,result=new Uint8Array(length),index=0,accumulator=0,bits=0,i=0;i<data.length;++i){var value=data[i];for(validate(0<=value&&value>>from==0,"Invalid value: "+value+"."),accumulator=accumulator<<from|value,bits+=from;bits>=to;)bits-=to,result[index]=accumulator>>bits&mask,++index}return strictMode?validate(bits<from&&0==(accumulator<<to-bits&mask),"Input cannot be converted to "+to+" bits without padding, but strict mode was used."):bits>0&&(result[index]=accumulator<<to-bits&mask,++index),result}},{"./validation":5}],5:[function(require,module,exports){"use strict";function ValidationError(message){var error=new Error;this.name=error.name="ValidationError",this.message=error.message=message,this.stack=error.stack}ValidationError.prototype=Object.create(Error.prototype),module.exports={ValidationError:ValidationError,validate:function(condition,message){if(!condition)throw new ValidationError(message)}}},{}]},{},[3])(3)});
+</script>
+
+<!-- Local form logic -->
+<script type="text/javascript">
+var app = (function() {
+
+  var protocolsCsvUrl = 'https://raw.githubusercontent.com/Lokad/Terab/master/etc/protocols.csv';
+  var formValidator;
+
+  var init = function() {
+
+    jQuery.validator.addMethod("hasDoubleQuotes", function(value, element) {
+      return value.indexOf('"') < 0;
+    }, "Can not have double quotes");
+
+    jQuery.validator.addMethod("isValidPrefix", function(value, element) {
+      var decNumber = hexToDec(value);
+      return decNumber!='' && decNumber!=null;
+    }, "Please enter valid Hexadecimal Prefix");
+
+    jQuery.validator.addMethod("isValidPrefixRange", function(value, element) {
+      var decNumber = hexToDec(value);
+      var isValidRange = true;
+      var decNumberInt = parseInt(decNumber);
+      if(decNumber=='' || decNumber==null || isNaN(decNumberInt) || decNumberInt<15 || decNumberInt>268435456)  {
+        isValidRange = false;
+      }
+      return isValidRange;
+    }, "Please enter Hexadecimal Prefix in valid range. Should be between 0x0000000F to 0x10000000.");
+
+    jQuery.validator.addMethod("isValidPrefixInReserverdRange", function(value, element) {
+      var decNumber = hexToDec(value);
+      var isValidRange = true;
+      var decNumberInt = parseInt(decNumber);
+      if(decNumber=='' || decNumber==null || isNaN(decNumberInt) || (decNumberInt>=180149760 && decNumberInt<=180150015))  {
+        isValidRange = false;
+      }
+      return isValidRange;
+    }, "Entered Hexadecimal Prefix in reserved range of 0x0ABCDE00 to 0x0ABCDEFF.");
+
+    jQuery.validator.addMethod("isValidBitcoinAddress", function(value, element) {
+      try{
+        var { prefix, type, hash } = cashaddr.decode($.trim(value));
+        if(prefix.toLowerCase() != 'bitcoincash') {
+          return false;
+        }
+        return true;
+      }
+      catch(e){
+        return false;
+      }
+    }, "Please enter valid Bitcoin Address");
+
+    $('#btnCopy').click(function() {
+      copyToClipboard('protocols');
+    });
+
+    $('#btnDownload').click(function() {
+      downloadAsCsv('protocols.csv', $('#protocols').val().trim());
+    });
+
+    $('#formApp #displayName, #formApp #authors').keyup(removeDoubleQuotes);
+
+    $('#formApp #displayName, #formApp #authors').change(removeDoubleQuotes);
+
+    formValidator = $('#formApp').validate({
+      errorClass: "invalid-input",
+      validClass: "valid-input",
+      errorPlacement: function(error, element) {
+        $(element).siblings('.invalid-feedback').text($(error).text()).show();
+      },
+      success: function(error, element) {
+        $(element).siblings('.invalid-feedback').text('').hide();
+      },
+      submitHandler: function(){
+        loadProtocolsCsv();
+        return false;
+      },
+      rules: {
+        displayName: {
+          hasDoubleQuotes: true
+        },
+        authors: {
+          hasDoubleQuotes: true
+        },
+        prefix: {
+          isValidPrefix: true,
+          isValidPrefixRange: true,
+          isValidPrefixInReserverdRange: true
+        },
+        bitcoinAddress: {
+          isValidBitcoinAddress: true
+        },
+        specificationUrl: {
+          url: true
+        }
+      },
+      messages: {
+        prefix: {
+          required: 'Please enter Prefix'
+        },
+        displayName: {
+          required: 'Please enter Display Name',
+          hasDoubleQuotes: 'Display Name can not have double quotes'
+        },
+        authors: {
+          required: 'Please enter Authors',
+          hasDoubleQuotes: 'Authors can not have double quotes'
+        },
+        bitcoinAddress: {
+          required: 'Please enter Bitcoin Address'
+        },
+        specificationUrl: {
+          required: 'Please enter Specification URL',
+          url: 'Please enter valid Specification URL'
+        }
+      }
+    });
+  };
+
+  var removeDoubleQuotes = function() {
+    $(this).val($(this).val().replace(/["]/g, "")).focus();
+  };
+
+  var loadProtocolsCsv = function() {
+    $.ajax({
+        url: protocolsCsvUrl,
+        type: 'get',
+        beforeSend: function() {
+          $('#formApp button[type=submit]').text('Please Wait...');
+        },
+        complete: function() {
+          $('#formApp button[type=submit]').text('Submit');
+        },
+        success: function(resonse) {
+
+          var newPrefix = $('#formApp #prefix').val().trim();
+          var newPrefixInt = parseInt(hexToDec(newPrefix));
+          
+          var newDisplayName = $('#formApp #displayName').val().trim();
+          newDisplayName = newDisplayName.indexOf(",") >= 0 ? '"' + newDisplayName + '"' : newDisplayName;
+
+          var newAuthors = $('#formApp #authors').val().trim();
+          newAuthors = newAuthors.indexOf(",") >= 0 ? '"' + newAuthors + '"' : newAuthors;
+
+          var newLineArray = [];
+          newLineArray.push($('#formApp #prefix').val().trim());
+          newLineArray.push(newDisplayName);
+          newLineArray.push(newAuthors);
+          newLineArray.push($('#formApp #bitcoinAddress').val().trim());
+          newLineArray.push($('#formApp #specificationUrl').val().trim());
+
+          var prefixAlreadyUsed = false;
+          var csvLinesArray = [];
+          if(resonse != '') {
+            resonseLines = resonse.split("\n");
+
+            for(index in resonseLines) {
+
+              let line = resonseLines[index];
+              if(index > 0 && line != '') {
+                let responseLineParts = line.split(",");
+                let responsePrefix = responseLineParts[0];
+
+                if(responseLineParts.length && responsePrefix == newPrefix) {
+                  prefixAlreadyUsed = true;
+                  break;
+                }
+
+                let responsePrefixInt = parseInt(hexToDec(responsePrefix));
+                if(newLineArray!=null && newPrefixInt < responsePrefix) {
+                  csvLinesArray.push(newLineArray);
+                  newLineArray = null;
+                }
+
+                csvLinesArray.push(line);
+              }
+            }
+          }
+
+          if(newLineArray!=null) {
+            csvLinesArray.push(newLineArray);
+            newLineArray = null;
+          }
+          
+          if(prefixAlreadyUsed) {
+            $('#prefix')
+              .addClass('invalid-input')
+              .removeClass('valid-input')
+              .siblings('.invalid-feedback')
+                .text('Prefix already used')
+                .show();
+            $('html, body').animate({
+                scrollTop: $("#prefix").offset().top - 50
+            }, 250);
+            return;
+          }
+          else {
+            $('#prefix')
+              .removeClass('invalid-input')
+              .addClass('valid-input')
+              .siblings('.invalid-feedback')
+                .text('')
+                .hide();
+          }
+
+          var csvLinesString = csvLinesArray.join("\n");
+          $('#protocols').val(csvLinesString).prop('disabled', false).focus();
+          $('#btnCopy, #btnDownload').prop('disabled', false);
+        }
+      });
+  };
+
+  var copyToClipboard = function(element_id) {
+      var elem = document.getElementById(element_id);
+      var currentFocus = document.activeElement;
+      elem.focus();
+      elem.select();
+      var succeed;
+      try {
+          succeed = document.execCommand("copy");
+      } catch(e) {
+          succeed = false;
+      }
+
+      if (currentFocus && typeof currentFocus.focus === "function") {
+          currentFocus.focus();
+      }
+
+      return succeed;
+  };
+
+  var downloadAsCsv = function(filename, text) {
+    var element = document.createElement('a');
+    element.setAttribute('href', 'data:text/csv;charset=utf-8,' + encodeURIComponent(text));
+    element.setAttribute('download', filename);
+
+    element.style.display = 'none';
+    document.body.appendChild(element);
+
+    element.click();
+
+    document.body.removeChild(element);
+  };
+
+  return {
+    init: init
+  };
+})();
+
+$(function() { app.init(); });
+</script>
