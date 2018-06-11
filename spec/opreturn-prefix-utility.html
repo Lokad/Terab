@@ -90,6 +90,14 @@
               </div>
             </div>
 
+            <div class="row">
+              <div class="col mb-3">
+                <label for="txidRedirectUrl">TXID Redirect URL</label>
+                <input type="text" class="form-control" name="txidRedirectUrl" id="txidRedirectUrl" placeholder="https://example.com/txid/{txid}" >
+                <div class="invalid-feedback"></div>
+              </div>
+            </div>
+
             <hr class="mb-4">
 
             <div class="row justify-content-center mb-5">
@@ -330,6 +338,9 @@ var app = (function() {
         },
         specificationUrl: {
           url: true
+        },
+        txidRedirectUrl: {
+          url: true
         }
       },
       messages: {
@@ -350,6 +361,9 @@ var app = (function() {
         specificationUrl: {
           required: 'Please enter Specification URL',
           url: 'Please enter valid Specification URL'
+        },
+        txidRedirectUrl: {
+          url: 'Please enter valid TXID Redirect URL'
         }
       }
     });
@@ -386,6 +400,7 @@ var app = (function() {
           newLineArray.push(newAuthors);
           newLineArray.push($('#formApp #bitcoinAddress').val().trim());
           newLineArray.push($('#formApp #specificationUrl').val().trim());
+          newLineArray.push($('#formApp #txidRedirectUrl').val().trim());
 
           var prefixAlreadyUsed = false;
           var csvLinesArray = [];
