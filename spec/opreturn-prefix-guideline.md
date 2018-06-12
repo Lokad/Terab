@@ -24,7 +24,7 @@ The OP_RETURN opcode works with a sequence of OP_PUSHDATA:
 
 In Bitcoin, multiple OP_PUSHDATA are considered as _standard_ transactions.
 
-The present guideline recommends inserting `0x04 [protocol ID]` as the very first element to specify your protocol identifier. That is:
+The present guideline recommends inserting `0x04 [protocol ID]` as the very first element to specify your protocol identifier. Note that `0x04` is a 1-byte _pushdata_ opcode part of Script indicating that the next 4 bytes are pushed onto the stack. That is:
 
     OP_RETURN
     0x04 [protocol ID]
@@ -99,13 +99,22 @@ Then the columns themselves:
 * `Prefix`: hexadecimal encoded (aka 0x01234567, little-endian)
 * `DisplayName`: string
 * `Authors`: string
-* `BitcoinAddress`: a valid CashAddr (starting with `bitcoincash:`)
+* `BitcoinAddress`: a valid CashAddr (starts with `bitcoincash:`)
 * `SpecificationUrl`: string
+* `TxidRedirectUrl` (optional): string (contains `{txid}`)
 
 Each line should not be longer than 1KB (1024 bytes) in total.
 
 The lines should be sorted in increasing order against their prefix.
 
+The field `BitcoinAddress` is intended to help the staff in charge of maintaining the file `protocols.csv` to sort out conflicting claims in the event where such claims were to arise.
+
+The field `TxidRedirectUrl` is intended to help blockchain explorers making protocols more discoverable. For any transaction associated to the protocol - as identified through its prefix - a redirecting link can be inserted. The field `TxidRedirectUrl` should contain the substring `{txid}` to be replaced by the transaction identifier encoded in hexadecimal (64 characters). The landing page of the redirect is expected to be a human-readable version of the transaction aligned with the semantic of the protocol.
+
 ## Footnotes
 
 1. For example, Terab (open source project by Lokad) is a specialized persistence backend intended to support the blockchain ultimately growing up to blocks of 1 terabyte. Such software components will be required in the future to cope with the increased usage of Bitcoin.
+
+## Acknowledgements
+
+James Cramer for suggesting the `TxidRedirectUrl` field.
