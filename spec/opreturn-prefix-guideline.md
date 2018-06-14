@@ -34,9 +34,11 @@ The present guideline recommends inserting `0x04 [protocol ID]` as the very firs
 
 The protocol ID comes first in order to improve the performance of any filter being implemented to operate on the blockchain: the protocol ID is picked first in order to skip the data as soon as possible.
 
-Also the protocol ID values, little-endian, **must be higher than 0x00 00 00 0F and lower than 0x10 00 00 00**. The lower range is reserved because identifiers would collide with special push ops, and would provide a favorable treatment to a short list of protocols. The upper range is reserved for backward compatible potential future adjustments to the present guideline.
+For the sake of readability, in this document and within the file `protocols.csv`, integers are written in hexadecimal form (C convention), that is 0x00000010 being equal to 16. However, values pushed on the Script stack are expected to be encoded in little endian.
 
-The inclusive range 0x0A BC DE 00 to 0x0A BC DE FF is reserved for testing purposes. Software toolkits and educational materials should use this range to demonstrate how protocols are built on Bitcoin. This range is similar in spirit to the domain name `example.com`.
+Also the protocol ID values, **must be higher than 0x0000000F and lower than 0x10000000**. The lower range is reserved because identifiers would collide with special push ops, and would provide a favorable treatment to a short list of protocols. The upper range is reserved for backward compatible potential future adjustments to the present guideline.
+
+The inclusive range 0x0ABCDE00 to 0x0ABCDEFF is reserved for testing purposes. Software toolkits and educational materials should use this range to demonstrate how protocols are built on Bitcoin. This range is similar in spirit to the domain name `example.com`.
 
 As a courtesy to the community, we recommend to either submit a ticket or a pull request to the Git repository at https://github.com/Lokad/Terab/ to claim your prefix with:
 
