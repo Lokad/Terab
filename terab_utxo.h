@@ -33,6 +33,14 @@ prune the branch.
 */
 typedef int32_t block_handle_t;
 
+/* Persistent identifier of an uncommitted block.
+
+Unlike committed blocks, which have a definite 32-byte block id that
+can be used to identify them, uncomitted blocks need an identifier to
+represent them across connections.
+*/
+typedef int64_t block_ucid_t;
+
 /* Boolean flags present on a block. */
 typedef enum block_flags
 {
@@ -63,10 +71,7 @@ struct block_info
 	int32_t blockheight;
 
 	/* Public blockchain identifier of a committed block.
-
-	If uncommitted, will contain a long-lived identifier generated
-	by Terab that can be used to retrieve the block handle from another
-	connection to the same server.
+	If uncommitted, will contain only zeroes.
 	*/
 	uint8_t blockid[32];
 };
@@ -241,13 +246,14 @@ int32_t terab_utxo_get(
 
 conn: opaque connection handle.
 parent: identifies the parent of the new block.
-blockid: the 32-byte hash of the new block.
-block: returned as the chandle to the new block.
+block: returned as the handle to the new block.
+block_ucid: optional, if provided will be updated to contain
+the persistent uncommitted block id of the new block.
 
 Errors:
 
 - TERAB_ERR_BLOCK_FROZEN in UTXO configuration if 'parent' is
-more than 100 blocks away from the longest chain stored
+more than 100 blocks away from the head of the longest chain stored
 in Terab.
 
 - TERAB_ERR_BLOCK_UNKNOWN if 'parent' does not correspond to
@@ -266,7 +272,8 @@ will clear the contents of the block and generate a new handle.
 int32_t terab_utxo_open_block(
 	connection_t conn,
 	block_handle_t parent,
-	block_handle_t* block
+	block_handle_t* block,
+	block_ucid_t* block_ucid
 );
 
 /* Write new outputs and their payloads to a new block.
@@ -287,6 +294,40 @@ known block.
 This error is non-recoverable: open a new block and start
 writing there.
 
+- TERAB_ERR_INVALID_REQUEST if one or more txo fields contradicts
+data specified by other blocks, or if a txo is malformed.
+
+- TERAB_ERR_INCONSISTENT_REQUEST if one or more txo fields contradict
+data specified for this block by previous calls to `terab_utxo_write_txs`
+(or the current one, if the same outpoint appears more than once).
+
+Validation rules:
+
+- Submitting a `txo_t` that is identical to the current state of the
+outpoint on the terab instance is always valid (by idempotence).
+
+- The `txo_t.produced` and `txo_t.spent` represent production or
+spending events for the transaction output in the chain leading up
+to `block`. An event can only be changed if it has not yet happened
+(a value of zero) or if it has happened in `block`, events that happened
+in other blocks can no longer be changed.
+
+When an event can be changed, the corresponding field may only be set to
+`block` (to indicate that the event occurred in the current block) or to
+zero (to undo a previous write that set the field to `block`, thereby
+"deleting" the event).
+
+- If `txo_t.produced` is zero, then `txo_t.spent` must also be zero
+(must produce before spending).
+
+- The `txo_t.satoshi` and `txo_t.payload` values can never be changed
+once they are set (and there is no reasonable situation where they
+would need to be changed). The will be the same for all chains in terab
+(not just for the chain leading up to `block`).
+
+However, if they are already set, then they may be omitted (all bits
+set to zero), in which case the existing values will be kept.
+
 This method is IDEMPOTENT.
 */
 int32_t terab_utxo_write_txs(
@@ -299,33 +340,34 @@ int32_t terab_utxo_write_txs(
 /* Acquire a handle to an existing, uncommitted block.
 
 conn: opaque connection handle.
-blockid: the 32-byte persistent identifier retrieved from the
-`block_info_t.blockid` of an uncommitted block.
+block_ucid: the persistent identifier retrieved from the call
+to `terab_utxo_open_block`
 block: returned as the handle to the block.
 
 Errors:
 
-- TERAB_ERR_BLOCK_UNKNOWN if 'blockid' does not correspond to a
+- TERAB_ERR_BLOCK_UNKNOWN if 'block_ucid' does not correspond to a
 known block.
 
 - TERAB_ERR_BLOCK_CORRUPTED if a corresponding block exists but is
 corrupted.
 
-If the corresponding block exists but is already committed, this function
-succeeds and returns the handle.
+An uncomitted block may still be retrieved by its block_ucid for a short
+duration after it has been committed (until the association is purged
+from the terab instance).
 
 This function is PURE.
 */
 int32_t terab_utxo_get_uncommitted_block(
 	connection_t conn,
-	uint8_t* blockid,
+	block_ucid_t block_ucid,
 	block_handle_t* block
 );
 
 /* Closes the write sequence for a new block.
 
 conn: opaque connection handle.
-block: identifies the block written to.
+block: identifies the block to be committed.
 blockid: the 32-byte hash of the block.
 
 Errors:
@@ -337,6 +379,9 @@ writing there.
 - TERAB_ERR_BLOCK_UNKNOWN if the block is unknown. Make sure
 that it was obtained from `terab_utxo_open_block` or
 `terab_utxo_get_block` on the same connection.
+
+- TERAB_ERR_BLOCK_COMMITTED if there exists another block with
+the provided `blockid`.
 
 This method is IDEMPOTENT: attempting to commit a block that
 is already committed simply succeeds.
