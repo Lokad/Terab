@@ -4,6 +4,7 @@ Prefix,DisplayName,Authors,BitcoinAddress,SpecificationUrl,TxidRedirectUrl
 0x00001337,GameChain Lobby,Devalbo,,https://github.com/devalbo/gamechain-lobby,
 0x000015B3,Satchat,Duc Nguyen,bitcoincash:qzymdkshczgdda0xekhl65knxl9les7cmcuxcmlqee,http://satchat.io/,
 0x000022B8,Turingnote,John Patterson,bitcoincash:qrkx43sa9cal4ylmw70uwcu09qzqfq5pxcs6sp4aaf,http://turingnote.io,
+0x00004b50,Keoken Platform,Bitprim Project,bitcoincash:qrsdw5crn75szgme7l6xaz2mymgjjsmkqshtg8lsce,https://keoken.io,
 0x0000544C,TradeLayer,Patrick Dugan,bitcoincash:qrcwrfg5q88dpwtjvnu53dwxjj686mmrk5nfd8zhgd,http://tradelayer.org,
 0x00031337,GameChain,Devalbo,,https://github.com/devalbo/gamechain,
 0x00424554,ChainBet,Jonald Fyookball,,https://github.com/fyookball/ChainBet,
