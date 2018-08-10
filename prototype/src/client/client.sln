@@ -1,0 +1,66 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.27703.2018
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Terab.BaseClient", "Terab.BaseClient\Terab.BaseClient.vcxproj", "{71BF4734-1E92-468E-9B95-F374975FB471}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Terab.StdAPI", "..\Terab.StdAPI\Terab.StdAPI.vcxproj", "{CB8A9AB2-ECBB-426E-8CB5-37F5F366C669}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Terab.SharpClient", "Terab.SharpClient\Terab.SharpClient.csproj", "{59458F25-56E8-4F2F-B03F-B9FDE958BB09}"
+	ProjectSection(ProjectDependencies) = postProject
+		{71BF4734-1E92-468E-9B95-F374975FB471} = {71BF4734-1E92-468E-9B95-F374975FB471}
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Terab.NativeConsole", "examples\Terab.NativeConsole\Terab.NativeConsole.vcxproj", "{D234870A-BCF7-4C72-96D6-4C3C821CDD45}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Terab.SharpConsole", "examples\Terab.SharpConsole\Terab.SharpConsole.csproj", "{A12ECB01-669E-4ED6-B1AF-4146FE11E459}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Debug|x64 = Debug|x64
+		Release|Any CPU = Release|Any CPU
+		Release|x64 = Release|x64
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{71BF4734-1E92-468E-9B95-F374975FB471}.Debug|Any CPU.ActiveCfg = Debug|Win32
+		{71BF4734-1E92-468E-9B95-F374975FB471}.Debug|x64.ActiveCfg = Debug|x64
+		{71BF4734-1E92-468E-9B95-F374975FB471}.Debug|x64.Build.0 = Debug|x64
+		{71BF4734-1E92-468E-9B95-F374975FB471}.Release|Any CPU.ActiveCfg = Release|Win32
+		{71BF4734-1E92-468E-9B95-F374975FB471}.Release|x64.ActiveCfg = Release|x64
+		{71BF4734-1E92-468E-9B95-F374975FB471}.Release|x64.Build.0 = Release|x64
+		{CB8A9AB2-ECBB-426E-8CB5-37F5F366C669}.Debug|Any CPU.ActiveCfg = Debug|Win32
+		{CB8A9AB2-ECBB-426E-8CB5-37F5F366C669}.Debug|x64.ActiveCfg = Debug|x64
+		{CB8A9AB2-ECBB-426E-8CB5-37F5F366C669}.Release|Any CPU.ActiveCfg = Release|Win32
+		{CB8A9AB2-ECBB-426E-8CB5-37F5F366C669}.Release|x64.ActiveCfg = Release|x64
+		{59458F25-56E8-4F2F-B03F-B9FDE958BB09}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{59458F25-56E8-4F2F-B03F-B9FDE958BB09}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{59458F25-56E8-4F2F-B03F-B9FDE958BB09}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{59458F25-56E8-4F2F-B03F-B9FDE958BB09}.Debug|x64.Build.0 = Debug|Any CPU
+		{59458F25-56E8-4F2F-B03F-B9FDE958BB09}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{59458F25-56E8-4F2F-B03F-B9FDE958BB09}.Release|Any CPU.Build.0 = Release|Any CPU
+		{59458F25-56E8-4F2F-B03F-B9FDE958BB09}.Release|x64.ActiveCfg = Release|Any CPU
+		{59458F25-56E8-4F2F-B03F-B9FDE958BB09}.Release|x64.Build.0 = Release|Any CPU
+		{D234870A-BCF7-4C72-96D6-4C3C821CDD45}.Debug|Any CPU.ActiveCfg = Debug|Win32
+		{D234870A-BCF7-4C72-96D6-4C3C821CDD45}.Debug|x64.ActiveCfg = Debug|x64
+		{D234870A-BCF7-4C72-96D6-4C3C821CDD45}.Debug|x64.Build.0 = Debug|x64
+		{D234870A-BCF7-4C72-96D6-4C3C821CDD45}.Release|Any CPU.ActiveCfg = Release|Win32
+		{D234870A-BCF7-4C72-96D6-4C3C821CDD45}.Release|x64.ActiveCfg = Release|x64
+		{D234870A-BCF7-4C72-96D6-4C3C821CDD45}.Release|x64.Build.0 = Release|x64
+		{A12ECB01-669E-4ED6-B1AF-4146FE11E459}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A12ECB01-669E-4ED6-B1AF-4146FE11E459}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A12ECB01-669E-4ED6-B1AF-4146FE11E459}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{A12ECB01-669E-4ED6-B1AF-4146FE11E459}.Debug|x64.Build.0 = Debug|Any CPU
+		{A12ECB01-669E-4ED6-B1AF-4146FE11E459}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A12ECB01-669E-4ED6-B1AF-4146FE11E459}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A12ECB01-669E-4ED6-B1AF-4146FE11E459}.Release|x64.ActiveCfg = Release|Any CPU
+		{A12ECB01-669E-4ED6-B1AF-4146FE11E459}.Release|x64.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {2E89602F-4BBF-4CCA-96FB-A2BC1A02BA14}
+	EndGlobalSection
+EndGlobal
