@@ -34,7 +34,7 @@ The present guideline recommends inserting `0x04 [protocol ID]` as the very firs
 
 The protocol ID comes first in order to improve the performance of any filter being implemented to operate on the blockchain: the protocol ID is picked first in order to skip the data as soon as possible.
 
-For the sake of readability, in this document and within the file `protocols.csv`, integers are written in hexadecimal form (C convention), that is 0x00000010 being equal to 16. However, values pushed on the Script stack are expected to be encoded in little endian.
+For the sake of readability, in this document and within the file `protocols.csv`, integers are written in hexadecimal form (C convention), that is 0x00000010 being equal to 16. However, values pushed on the Script stack are expected to be encoded in [little endian](https://en.wikipedia.org/wiki/Endianness#/media/File:Little-Endian.svg). Thus, for a protocol identifier 0x0ABCDE01, the first bytes of the script are expected to be `{ 0x6a, 0x04, 0x01, 0xDE, 0xBC, 0x0A }` where `0x6a` encodes for OP_RETURN.
 
 Also the protocol ID values, **must be higher than 0x0000000F and lower than 0x10000000**. The lower range is reserved because identifiers would collide with special push ops, and would provide a favorable treatment to a short list of protocols. The upper range is reserved for backward compatible potential future adjustments to the present guideline.
 
