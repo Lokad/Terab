@@ -7,7 +7,7 @@ Prefix,DisplayName,Authors,BitcoinAddress,SpecificationUrl,TxidRedirectUrl
 0x000022B8,Turingnote,John Patterson,bitcoincash:qrkx43sa9cal4ylmw70uwcu09qzqfq5pxcs6sp4aaf,http://turingnote.io,
 0x00004b50,Keoken Platform,Bitprim Project,bitcoincash:qrsdw5crn75szgme7l6xaz2mymgjjsmkqshtg8lsce,https://keoken.io,
 0x0000544C,TradeLayer,Patrick Dugan,bitcoincash:qrcwrfg5q88dpwtjvnu53dwxjj686mmrk5nfd8zhgd,http://tradelayer.org,
-0x0000B006,Bookchain,BookChain Devs,bitcoincash:qqcash37qskcqn2jm2qlkgts5ju7lh9ft5v59l7005,https://books.bch.sx,https://bookchain.cash/hash/{txid}
+0x0000B006,Bookchain,BookChain Devs,bitcoincash:qqcash37qskcqn2jm2qlkgts5ju7lh9ft5v59l7005,https://bookchain.cash,https://bookchain.cash/hash/{txid}
 0x00031337,GameChain,Devalbo,,https://github.com/devalbo/gamechain,
 0x00666770,OFGP,OFGP Devs,bitcoincash:qzn9zdurl5hf25h8hkjue3dtqsywl3mpesw0p08z5u,https://github.com/ofgp,
 0x04008080,BCH-DNS,BCHDNS Devs,bitcoincash:qqcash37qskcqn2jm2qlkgts5ju7lh9ft5v59l7005,https://domains.bch.sx,https://domains.bch.sx/whois/{txid}
