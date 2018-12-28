@@ -7,7 +7,11 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Terab.UTXO.Core\Terab.UTXO.Core.csproj" />
+    <ProjectReference Include="..\..\extern\src\commandline\CommandLine.csproj" />
+    <ProjectReference Include="..\Terab.Lib\Terab.Lib.csproj" />
   </ItemGroup>
 
+  <Target Name="CopyNativeLib" AfterTargets="Build">
+    <Copy SourceFiles="@(NativeLib)" DestinationFolder="$(OutputPath)" />
+  </Target>
 </Project>

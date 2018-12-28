@@ -1,10 +1,10 @@
-# Sozu table, an I/O optimized data structure for the UTXO dataset of Bitcoin
+# The Sozu table, a blockchain-centric data structure for the UTXO dataset of Bitcoin
 
-> By Joannes Vermorel, Lokad, 2018-03-19
+> By Joannes Vermorel, Lokad, March 2018 (minor revision August 2018)
 
 _In the present document, Bitcoin refers to Bitcoin Cash._
 
-**Abstract:** In order to become a viable currency, Bitcoin has the ambition to scale on-chain to a large extent. Scaling the blockchain entails varied challenges. We present the Sozu table, a high-density I/O optimized data structure intended for the UTXO dataset (unspent transaction outputs). The Sozu table is a layered hashtable designed to max-out a mix of data storage technologies. The I/O strategy of the Sozu table is aligned with the underlying hardware design.
+**Abstract:** Bitcoin has the ambition to scale on-chain up to millions of transactions per second. Scaling the blockchain entails varied challenges. We present the Sozu table, a high-density I/O optimized data structure intended for the UTXO dataset (unspent transaction outputs). Unlike a traditional key-value store, the Sozu table levarages the Lindy effect, as UTXO entries have a temporal dimension. The Sozu table is a layered hashtable designed to max-out a mix of data storage technologies. The I/O strategy of the Sozu table is aligned with the underlying hardware design. 
 
 ![Shishi-odoshi or Sōzu](shishi-odoshi.png)
 
@@ -50,13 +50,14 @@ The Sozu table is designed around the following insights:
 * on nearly all data storage devices, data cannot be accessed at the byte level; instead, whenever a byte is read, physically the device retrieves a buffer of 4kB or larger. The Sozu table explicitly takes advantage of this property of the underlying storage hardware, in order to reduce its IOPS requirements.
 * all writes do not need to be immediately durable; durability is only required to be guaranteed at the block boundaries in the Bitcoin context. In exchange for more restricted durability guarantees, the Sozu table reduces its IOPS requirements.
 * data storage technologies offer varying economic trade-offs, where the options delivering the most IOPS are also the ones with higher _per GB_ costs. The hierarchical design of the Sozu table is naturally suitable to have each layer supported by potentially distinct data storage devices.
+* the Lindy effect implies that old UTXO entries are also the ones that are most likely to live the longest. Thus, the layers offering the most IOPS are dedicated to the fresh UTXOs, while the layers that offer the best _per GB_ cost, are dedicated to old UTXOs.
 * by decorating the TXO entries with their lifecycle metadata, the Sozu table can gracefully and lazily handle the limited contention that exists on the tip of the blockchain. Multiple chain tips can coexist and compete for the same hardware resources, until Bitcoin settles for the one chain deemed longest.
 
 The Sozu table offers the possibility to query not just one UTXO dataset, but _all_ the _recent_ UTXO datasets. This capability is important to gracefully handle competing tips of the blockchain.
 
 The following graph illustrates the high-level organization of the Sozu table. The Sozu table organizes its entries across multiple layers. Each layer contains many buckets. Each bucket has a reference to a bucket range in the next layer.
 
-Each bucket has also a _maximum block height_ value which identifies the highest block height observed for an entry in one of its children. This value plays an important in role in optimizing writes.
+Each bucket has also a _maximum production block height_ value which identifies the highest block height observed for an entry in one of its children. This value plays an important in role in optimizing writes.
 
 ![The Sozu table, a hierarchical variant of a hash table](sozu.png)
 
@@ -71,7 +72,7 @@ By listing both production and consumption blocks, the entire lifecycle of a TXO
 
 In other words, the Sozu table _soft deletes_ its entries by marking them as _consumed_. Then, when the entries are old enough, blockchain-wise, they are lazily _hard deleted_. This point is covered in greater detail in the following.
 
-Blocks cannot be identified only by their block-height. However as the Bitcoin protocol steers the generation of new blocks toward 10min intervals between blocks, 4-bytes integers are sufficient to uniquely identify all blocks in existence, including all the orphaned ones, for over 50,000 years.
+Blocks cannot be identified only by their block height. However as the Bitcoin protocol steers the generation of new blocks toward 10min intervals between blocks, 4-bytes integers are sufficient to uniquely identify all blocks in existence, including all the orphaned ones, for over 50,000 years.
 
 ## Reading the Sozu table
 
@@ -122,7 +123,7 @@ The argument `k` is a key - i.e. an outpoint. The argument `b` is a reference to
 
 The helper method `ContainsKey()` checks whether a bucket contains a key matching the key passed as argument. The inner data structure of the bucket matters little to the overall performance, as the bucket is read as a whole, so a sequential exploration of the bucket to seek a key has little overall impact on the performance.
 
-The helper method `Height()` returns the highest block height of any block associated to any entry found in the children of the bucket. This value is pre-computed and part of the bucket itself. The Sozu table ensures that this value is properly maintained during _write_ operations.
+The helper method `Height()` returns the highest block height of any production block associated to any entry found in the children of the bucket. This value is pre-computed and part of the bucket itself. The Sozu table ensures that this value is properly maintained during _write_ operations.
 
 The helper method `Hash()` computes the hash associated with the key, and `HashRange()` computes the segment of hash values covered by the bucket.
 
@@ -180,7 +181,7 @@ The method `IsOverflowing()` returns _true_ if the memory footprint of the entri
 
 The method `GetSpill()` returns two elements. First, it returns `f` the entries that are intended to flow to the next layer, which always include the entries marked with `m=1`. Second, it returns a shallow copy of the bucket `b` where the entries flowing downward have been removed. Finally, the method ensures that the entries that remain in the bucket `b` do not exceed its capacity. 
 
-The method `GetSpill()` also ensure that the _maximum block height_ value of `b` is adjusted to reflect its revised value that depends on the entries found in `f` and the original value for `b`. Notably, for any given bucket `b`, this value can only increase over time.
+The method `GetSpill()` also ensure that the _maximum production block height_ value of `b` is adjusted to reflect its revised value that depends on the entries found in `f` and the original value for `b`. Notably, for any given bucket `b`, this value can only increase over time.
 
 The method `AllocateChildren()` returns two elements. First, it returns a reference `s` to a new range of empty buckets allocated in the next layer, positioned below `b`. Second it returns a shallow copy of the bucket `b` that properly refers to `s` for its children. A lazy allocation of the buckets is important in order to avoid accidentally inflating the data storage requirement of the Sozu table by a large constant factor by requiring the last layer to be fully allocated while it only contains a small number of non-empty buckets.
 

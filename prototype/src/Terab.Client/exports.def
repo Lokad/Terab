@@ -1,0 +1,12 @@
+LIBRARY
+EXPORTS terab_initialize
+EXPORTS terab_shutdown
+EXPORTS terab_connect
+EXPORTS terab_disconnect
+EXPORTS terab_utxo_open_block
+EXPORTS terab_utxo_commit_block
+EXPORTS terab_utxo_get_committed_block
+EXPORTS terab_utxo_get_uncommitted_block
+EXPORTS terab_utxo_get_blockinfo
+EXPORTS terab_utxo_get_coins
+EXPORTS terab_utxo_set_coins

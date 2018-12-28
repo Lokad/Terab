@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "LightningDB.Tests": {
+      "commandName": "Project",
+      "nativeDebugging": true
+    }
+  }
+}

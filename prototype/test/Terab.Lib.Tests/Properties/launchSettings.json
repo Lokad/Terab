@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "Terab.Lib.Tests": {
+      "commandName": "Project",
+      "nativeDebugging": true
+    }
+  }
+}
