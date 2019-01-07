@@ -1,0 +1,1 @@
+The sponsorship of Terab by CoinGeek and nChain has been discontinued.
